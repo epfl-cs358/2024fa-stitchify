@@ -1,32 +1,17 @@
-#define stepPinX 2      
-#define dirPinX  5      
-#define enablePin 8     
-char s1[5] = "45\n"; 
-char s2[5] = "0\n";
+#include <Servo.h>
+
+Servo myServo;  
+int angle = 0;
+
 void setup() {
-  pinMode(stepPinX, OUTPUT);   
-  pinMode(dirPinX, OUTPUT);   
-  pinMode(enablePin, OUTPUT); 
-  digitalWrite(enablePin, LOW); 
-  digitalWrite(dirPinX, HIGH);  
-  Serial.begin(9600);
+  Serial.begin(9600);   
+  myServo.attach(9);    
 }
+
 void loop() {
-  for (int i = 0; i < 200; i++) {
-    digitalWrite(stepPinX, HIGH);
-    delayMicroseconds(500); 
-    digitalWrite(stepPinX, LOW);
-    delayMicroseconds(500);
+  for (angle = 0; angle <= 180; angle += 45) {  
+    myServo.write(angle);  
+    Serial.write(angle);
+    delay(1000);  
   }
-  Serial.println(s1); 
-  delay(1000); 
-  digitalWrite(dirPinX, LOW);   
-  for (int i = 0; i < 200; i++) {
-    digitalWrite(stepPinX, HIGH);
-    delayMicroseconds(500);  
-    digitalWrite(stepPinX, LOW);
-    delayMicroseconds(500);
-  }
-  Serial.println(s2); 
-  delay(1000);
 }
