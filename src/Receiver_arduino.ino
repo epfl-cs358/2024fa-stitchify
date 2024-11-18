@@ -1,36 +1,78 @@
-#define stepPinX 2
-#define dirPinX  5
-#define enablePin 8
+#include <Wire.h>
 
-char mystr[10];
-int angle = 0;
-int steps = 0;
+// Pin definitions for the CNC shield (X-axis stepper motor)
+#define stepPin 2    // X-axis step pin
+#define dirPin  5    // X-axis direction pin
+#define enablePin 8  // Enable pin for the motor driver
+
+int currentSteps = 0; // Track the current step position
+int targetSteps = 0;  // Target steps based on received data
 
 void setup() {
-  pinMode(stepPinX, OUTPUT);   
-  pinMode(dirPinX, OUTPUT);   
-  pinMode(enablePin, OUTPUT); 
+  // Configure motor driver pins
+  pinMode(stepPin, OUTPUT);
+  pinMode(dirPin, OUTPUT);
+  pinMode(enablePin, OUTPUT);
 
-  digitalWrite(enablePin, LOW); 
-  digitalWrite(dirPinX, HIGH);  
+  // Enable the stepper motor
+  digitalWrite(enablePin, LOW);
 
+  // Start I2C communication as slave with address 8
+  Wire.begin(8);
+  Wire.onReceive(receiveData);
+
+  // Start serial communication for debugging
   Serial.begin(9600);
+  Serial.println("Ready to receive step count.");
 }
 
 void loop() {
-  memset(mystr, 0, sizeof(mystr));   
-  Serial.readBytesUntil('\n', mystr, sizeof(mystr) - 1); 
-  angle = atoi(mystr); 
+  // Nothing to do here; motor movement is handled in `moveMotor` function
+}
 
-  digitalWrite(dirPinX, LOW); 
-  for (int i = 0; i < steps; i++) 
-  {
-    digitalWrite(stepPinX, HIGH);
-    delayMicroseconds(500); 
-    digitalWrite(stepPinX, LOW);
+// I2C receive event handler
+void receiveData(int byteCount) {
+  int steps = 0; // Reset steps variable
+  while (Wire.available()) {
+    steps = Wire.read();  // Read the received byte (step count data)
+  }
+
+  // Update the target position with the received step count
+  targetSteps = steps;
+
+  Serial.print("Received steps: ");
+  Serial.println(steps);
+
+  moveMotor(targetSteps);
+}
+
+// Function to move the motor to the target position
+void moveMotor(int targetSteps) {
+  int stepDifference = targetSteps - currentSteps;
+
+  if (stepDifference > 0) {
+    // Move forward
+    digitalWrite(dirPin, HIGH);
+  } else if (stepDifference < 0) {
+    // Move backward
+    digitalWrite(dirPin, LOW);
+    stepDifference = -stepDifference; // Make the step difference positive
+  } else {
+    // Already at the target position
+    return;
+  }
+
+  // Move the motor step by step
+  for (int i = 0; i < stepDifference; i++) {
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(500); // Adjust delay for speed control
+    digitalWrite(stepPin, LOW);
     delayMicroseconds(500);
   }
-  
-  Serial.print(steps);
-  delay(1000);
+
+  // Update current position
+  currentSteps = targetSteps;
+
+  Serial.print("Motor moved to position: ");
+  Serial.println(currentSteps);
 }
