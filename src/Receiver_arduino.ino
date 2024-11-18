@@ -1,14 +1,30 @@
-#include <ESP32Servo.h>
+#include <Servo.h>
 
-Servo myServo; // Create a servo object
+Servo myServo;
+char mystr[10];
+int angle = 0;
 
 void setup() {
-  myServo.attach(18); // Attach the servo to pin 18
+  Serial.begin(9600);
+  myServo.attach(9);
+  myServo.write(0);
 }
 
 void loop() {
-  myServo.write(0);   // Move to 0 degrees
-  delay(1000);        // Wait 1 second
-  myServo.write(180); // Move to 180 degrees
-  delay(1000);        // Wait 1 second
+  memset(mystr, 0, sizeof(mystr));
+  Serial.readBytesUntil('\n', mystr, sizeof(mystr) - 1);
+  Serial.println(mystr);
+
+  angle = atoi(mystr);
+
+  if (angle >= 0 && angle <= 180) {
+    myServo.write(angle);
+    Serial.print("Servo moved to ");
+    Serial.print(angle);
+    Serial.println(" degrees");
+  } else {
+    Serial.println("Invalid angle received. Please send a value between 0 and 180.");
+  }
+  
+  delay(1000);
 }
