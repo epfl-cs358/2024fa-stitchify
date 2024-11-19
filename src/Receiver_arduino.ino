@@ -4,8 +4,8 @@
 #define stepPin 2    // X-axis step pin
 #define dirPin  5    // X-axis direction pin
 #define enablePin 8  // Enable pin for the motor driver
-#define switch1Pin A0
-
+#define yMinusPin 2  // Y- axis end-stop pin (Negative end stop)
+#define yPlusPin 14  // Y+ axis end-stop pin (Positive end stop)
 
 int currentSteps = 0; // Track the current step position
 int targetSteps = 0;  // Target steps based on received data
@@ -15,6 +15,10 @@ void setup() {
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   pinMode(enablePin, OUTPUT);
+
+  // Configure the Y-axis limit switch pins for end stops
+  pinMode(yMinusPin, INPUT_PULLUP);  // Y- limit switch (Normally Open)
+  pinMode(yPlusPin, INPUT_PULLUP);   // Y+ limit switch (Normally Open)
 
   // Enable the stepper motor
   digitalWrite(enablePin, LOW);
@@ -66,7 +70,13 @@ void moveMotor(int targetSteps) {
 
   // Move the motor step by step
   for (int i = 0; i < stepDifference; i++) {
-    if (digitalRead(switch1Pin) == LOW) return;
+    // Check if any of the limit switches are pressed
+    
+    if (digitalRead(yPlusPin) == LOW) {
+      Serial.println("Y+ limit switch pressed. Stopping motor.");
+      return; // Stop movement if Y+ switch is pressed
+    }
+
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(500); // Adjust delay for speed control
     digitalWrite(stepPin, LOW);
