@@ -4,6 +4,8 @@
 #define stepPin 2    // X-axis step pin
 #define dirPin  5    // X-axis direction pin
 #define enablePin 8  // Enable pin for the motor driver
+#define switch1Pin A0
+
 
 int currentSteps = 0; // Track the current step position
 int targetSteps = 0;  // Target steps based on received data
@@ -64,6 +66,7 @@ void moveMotor(int targetSteps) {
 
   // Move the motor step by step
   for (int i = 0; i < stepDifference; i++) {
+    if (digitalRead(switch1Pin) == LOW) return;
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(500); // Adjust delay for speed control
     digitalWrite(stepPin, LOW);
