@@ -1,0 +1,67 @@
+#include <Wire.h>
+#include <Servo.h>
+
+#define servoPin1 9   // Pin to control the first servo
+#define servoPin2 10  // Pin to control the second servo
+
+int angle1 = 0;       // Current angle value for Servo1
+int angle2 = 0;       // Current angle value for Servo2
+int nemaAngle = 0;    // Current step value for NEMA motor
+
+Servo servo1;         // Create Servo1 object
+Servo servo2;         // Create Servo2 object
+
+void setup() {
+  pinMode(servoPin1, OUTPUT);    // Pin for controlling the first servo
+  pinMode(servoPin2, OUTPUT);    // Pin for controlling the second servo
+
+  Serial.begin(9600);           
+  Wire.begin();                 // Start I2C communication as master
+
+  servo1.attach(servoPin1);     // Attach the first servo to the specified pin
+  servo2.attach(servoPin2);     // Attach the second servo to the specified pin
+
+  servo1.write(0);              // Initialize the first servo at 0 degrees
+  servo2.write(0);              // Initialize the second servo at 0 degrees
+
+  Serial.println("Enter commands: s1 x, s2 x, or n x (e.g., 's1 90').");
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n'); // Read user input
+    input.trim(); // Remove any extra spaces or newline characters
+
+    if (input.startsWith("s1 ")) {
+      // Command for Servo1
+      angle1 = input.substring(3).toInt(); // Extract the angle
+      if (angle1 > 180) angle1 = 180;     // Ensure the angle is within valid range
+      servo1.write(angle1);               // Move Servo1
+      Serial.print("Servo1 moved to: ");
+      Serial.println(angle1);
+
+    } else if (input.startsWith("s2 ")) {
+      // Command for Servo2
+      angle2 = input.substring(3).toInt(); // Extract the angle
+      if (angle2 > 180) angle2 = 180;     // Ensure the angle is within valid range
+      servo2.write(angle2);               // Move Servo2
+      Serial.print("Servo2 moved to: ");
+      Serial.println(angle2);
+
+    } else if (input.startsWith("n ")) {
+      // Command for NEMA motor
+      nemaAngle = input.substring(2).toInt(); // Extract the target steps
+      Serial.print("Sending to NEMA motor: ");
+      Serial.println(nemaAngle);
+
+      // Send NEMA motor angle over I2C to the slave
+      Wire.beginTransmission(8); // 8 is the I2C address of the slave Arduino
+      Wire.write(nemaAngle);     // Send the NEMA motor angle
+      Wire.endTransmission();    // End the transmission
+
+    } else {
+      // Invalid command
+      Serial.println("Invalid command. Use 's1 x', 's2 x', or 'n x'.");
+    }
+  }
+}
