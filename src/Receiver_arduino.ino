@@ -82,6 +82,7 @@ void moveMotor(int steps) {
     Serial.println("Switch is NOT pressed!");
     } else {
       Serial.println("Switch is pressed.");
+      break;
     }
     if (digitalRead(yPlusPin) == LOW) {
       Serial.println("Y+ limit switch pressed. Stopping motor.");
