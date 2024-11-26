@@ -1,33 +1,27 @@
 #include <Wire.h>
 
-// Pin definitions for the CNC shield (X-axis stepper motor)
-#define stepPin 2    // X-axis step pin
-#define dirPin  5    // X-axis direction pin
-#define enablePin 8  // Enable pin for the motor driver
-#define yMinusPin 2  // Y- axis end-stop pin (Negative end stop)
-#define yPlusPin 14  // Y+ axis end-stop pin (Positive end stop)
+#define stepPin 2  
+#define dirPin  5  
+#define enablePin 8 
+#define yMinusPin 2 
+#define yPlusPin 14
 const int SwitchPin = 11;
-int currentSteps = 0; // Track the current step position
-int targetSteps = 0;  // Target steps based on received data
+int currentSteps = 0;
+int targetSteps = 0;
 
 void setup() {
-  // Configure motor driver pins
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   pinMode(enablePin, OUTPUT);
 
-  // Configure the Y-axis limit switch pins for end stops
-  pinMode(yMinusPin, INPUT_PULLUP);  // Y- limit switch (Normally Open)
-  pinMode(yPlusPin, INPUT_PULLUP);   // Y+ limit switch (Normally Open)
+  pinMode(yMinusPin, INPUT_PULLUP);
+  pinMode(yPlusPin, INPUT_PULLUP);
 
-  // Enable the stepper motor
   digitalWrite(enablePin, LOW);
 
-  // Start I2C communication as slave with address 8
   Wire.begin(8);
   Wire.onReceive(receiveData);
 
-  // Start serial communication for debugging
   Serial.begin(9600);
 
   pinMode(SwitchPin, INPUT_PULLUP);
@@ -37,17 +31,14 @@ void setup() {
 }
 
 void loop() {
-  // Nothing to do here; motor movement is handled in `moveMotor` function
 }
 
-// I2C receive event handler
 void receiveData(int byteCount) {
-  int steps = 0; // Reset steps variable
+  int steps = 0; 
   while (Wire.available()) {
-    steps = (steps << 8) + Wire.read();  // Read the received byte (step count data)
+    steps = (steps << 8) + Wire.read();
   }
 
-  // Update the target position with the received step count
   targetSteps = steps;
 
   Serial.print("Received steps: ");
@@ -56,27 +47,21 @@ void receiveData(int byteCount) {
   moveMotor(targetSteps);
 }
 
-// Function to move the motor by currentSteps position
 void moveMotor(int steps) {
 
   int stepsPosNeg = 1;
   if(steps < 0) stepsPosNeg = -1;
 
   if (steps > 0) {
-    // Move forward
     digitalWrite(dirPin, HIGH);
   } else if (steps < 0) {
-    // Move backward
     digitalWrite(dirPin, LOW);
-    steps = -steps; // Make the step difference positive
+    steps = -steps;
   } else {
-    // Already at the target position
     return;
   }
 
-  // Move the motor step by step
   for (int i = 0; i < steps; i++) {
-    // Check if any of the limit switches are pressed
     int switchState = digitalRead(SwitchPin);
     if (switchState == LOW) {
     Serial.println("Switch is NOT pressed!");
@@ -86,13 +71,13 @@ void moveMotor(int steps) {
     }
     if (digitalRead(yPlusPin) == LOW) {
       Serial.println("Y+ limit switch pressed. Stopping motor.");
-      return; // Stop movement if Y+ switch is pressed
+      return;
     }
 
     currentSteps += stepsPosNeg;
 
     digitalWrite(stepPin, HIGH);
-    delayMicroseconds(500); // Adjust delay for speed control
+    delayMicroseconds(500);
     digitalWrite(stepPin, LOW);
     delayMicroseconds(500);
   }
