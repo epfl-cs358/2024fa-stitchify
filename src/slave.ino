@@ -3,8 +3,8 @@
 #define stepPin 2  
 #define dirPin  5  
 #define enablePin 8 
-#define yMinusPin 2 
-#define yPlusPin 14
+//#define yMinusPin  
+//#define yPlusPin 14
 const int SwitchPin = 11;
 int currentSteps = 0;
 int targetSteps = 0;
@@ -14,8 +14,8 @@ void setup() {
   pinMode(dirPin, OUTPUT);
   pinMode(enablePin, OUTPUT);
 
-  pinMode(yMinusPin, INPUT_PULLUP);
-  pinMode(yPlusPin, INPUT_PULLUP);
+ // pinMode(yMinusPin, INPUT_PULLUP);
+ // pinMode(yPlusPin, INPUT_PULLUP);
 
   digitalWrite(enablePin, LOW);
 
@@ -62,9 +62,9 @@ void moveMotor(int steps) {
   }
 
   for (int i = 0; i < steps; i++) {
-    int switchState = digitalRead(SwitchPin);
+   int switchState = digitalRead(SwitchPin);
     if (switchState == LOW) {
-    Serial.println("Switch is NOT pressed!");
+    //Serial.println("Switch is NOT pressed!");
     } else {
       Serial.println("Switch is pressed.");
       break;
