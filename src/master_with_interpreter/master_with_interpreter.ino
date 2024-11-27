@@ -1,4 +1,3 @@
-//testing 1
 #include <Wire.h>
 #include <Servo.h>
 
@@ -50,10 +49,18 @@ void loop() {
 
     } else if (input.startsWith("n ")) {
       nemaAngle = input.substring(2).toInt();
+      int neg = 0;
+      if (nemaAngle < 0) 
+      {
+        nemaAngle = -nemaAngle;
+        neg = 1;
+      }
       Serial.print("Sending to NEMA motor: ");
+      Serial.println(neg);
       Serial.println(nemaAngle);
 
       Wire.beginTransmission(8);
+      Wire.write(neg); 
       Wire.write(nemaAngle); 
       Wire.endTransmission();
 

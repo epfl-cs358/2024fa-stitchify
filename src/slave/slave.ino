@@ -34,31 +34,31 @@ void loop() {
 }
 
 void receiveData(int byteCount) {
-  int steps = 0; 
-  while (Wire.available()) {
-    steps = Wire.read();
-  }
+  int neg = 0;
+  neg = Wire.read();
 
-  targetSteps = steps;
+  int steps = 0; 
+  steps = Wire.read();
 
   Serial.print("Received steps: ");
   Serial.println(steps);
+  Serial.println(neg)
 
-  moveMotor(targetSteps);
+  targetSteps = steps;
+  moveMotor(neg, targetSteps);
 }
 
-void moveMotor(int steps) {
+void moveMotor(int neg, int steps) {
 
   int stepsPosNeg = 1;
-  if(steps < 0) stepsPosNeg = -1;
+  if(neg == 1) stepsPosNeg = -1;
 
-  if (steps > 0) {
-    digitalWrite(dirPin, HIGH);
-  } else if (steps < 0) {
-    digitalWrite(dirPin, LOW);
-    steps = -steps;
-  } else {
+  if (steps == 0){
     return;
+  } else if (neg == 0) {
+    digitalWrite(dirPin, HIGH);
+  } else 
+    digitalWrite(dirPin, LOW);
   }
 
   for (int i = 0; i < steps; i++) {
