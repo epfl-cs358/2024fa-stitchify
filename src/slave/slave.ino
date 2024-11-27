@@ -42,7 +42,7 @@ void receiveData(int byteCount) {
 
   Serial.print("Received steps: ");
   Serial.println(steps);
-  Serial.println(neg)
+  Serial.println(neg);
 
   targetSteps = steps;
   moveMotor(neg, targetSteps);
@@ -53,19 +53,27 @@ void moveMotor(int neg, int steps) {
   int stepsPosNeg = 1;
   if(neg == 1) stepsPosNeg = -1;
 
-  if (steps == 0){
+  if (steps == 0)
+  {
     return;
-  } else if (neg == 0) {
+  } 
+  else if (neg == 0) 
+  {
     digitalWrite(dirPin, HIGH);
-  } else 
+  } 
+  else 
+  {
     digitalWrite(dirPin, LOW);
   }
 
   for (int i = 0; i < steps; i++) {
    int switchState = digitalRead(SwitchPin);
-    if (switchState == LOW) {
+    if (switchState == LOW) 
+    {
     //Serial.println("Switch is NOT pressed!");
-    } else {
+    } 
+    else 
+    {
       Serial.println("Switch is pressed.");
       break;
     }
