@@ -57,21 +57,22 @@ void loop() {
       Serial.println(angle1);
 
     } else if (input.startsWith("s2 ")) {
-      angle2 = input.substring(3).toInt(); 
-      if (angle2 > 180) angle2 = 180;
-      servo2.write(angle2); 
-      Serial.print("Servo2 moved to: ");
-      Serial.println(angle2);
-
-    } else if (input.startsWith("n ")) {
       nemaAngle = input.substring(2).toInt();
+      int neg = 0;
+      if (nemaAngle < 0) 
+      {
+        nemaAngle = -nemaAngle;
+        neg = 1;
+      }
       Serial.print("Sending to NEMA motor: ");
+      Serial.println(neg);
       Serial.println(nemaAngle);
 
-      Wire.beginTransmission(8); 
-      Wire.write(nemaAngle);
+      Wire.beginTransmission(8);
+      Wire.write(neg); 
+      Wire.write(nemaAngle); 
       Wire.endTransmission();
-
+      
     } else {
       Serial.println("Invalid command. Use 's1 x', 's2 x', or 'n x'.");
     }
