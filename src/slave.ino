@@ -36,7 +36,7 @@ void loop() {
 void receiveData(int byteCount) {
   int steps = 0; 
   while (Wire.available()) {
-    steps = (steps << 8) + Wire.read();
+    steps = Wire.read();
   }
 
   targetSteps = steps;
