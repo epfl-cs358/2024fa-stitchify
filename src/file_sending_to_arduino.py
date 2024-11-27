@@ -12,7 +12,7 @@ try:
 except Exception as e:
     print(f"Error connecting to Arduino: {e}")
     exit()
-
+response = ser.readline().decode().strip()
 try:
     with open(commands_file, "r") as file:
         for line in file:
@@ -20,7 +20,7 @@ try:
             if command:
                 print(f"Sending: {command}")
                 ser.write((command + "\n").encode())
-                time.sleep(0.5)
+                time.sleep(1)
                 response = ser.readline().decode().strip()
                 if response:
                     print(f"Arduino response: {response}")
