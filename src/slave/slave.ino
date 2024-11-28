@@ -34,11 +34,11 @@ void loop() {
 }
 
 void receiveData(int byteCount) {
-  int neg = 0;
+  int neg = 0, steps = 0;
   neg = Wire.read();
-
-  int steps = 0; 
   steps = Wire.read();
+
+  steps = (steps << 8) + Wire.read();
 
   Serial.print("Received steps: ");
   Serial.println(steps);
