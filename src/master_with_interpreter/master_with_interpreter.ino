@@ -55,13 +55,17 @@ void loop() {
         nemaAngle = -nemaAngle;
         neg = 1;
       }
+      int bit1 = nemaAngle >> 8;
+      int bit2 = nemaAngle & 255;
+
       Serial.print("Sending to NEMA motor: ");
       Serial.println(neg);
-      Serial.println(nemaAngle);
+      Serial.println((bit1 << 8) + bit2);
 
       Wire.beginTransmission(8);
       Wire.write(neg); 
-      Wire.write(nemaAngle); 
+      Wire.write(bit1); 
+      Wire.write(bit2);
       Wire.endTransmission();
 
     } else {
