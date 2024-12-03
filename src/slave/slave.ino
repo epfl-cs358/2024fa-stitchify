@@ -77,9 +77,9 @@ void moveMotor(int neg, int steps) {
     currentSteps += stepsPosNeg;
 
     digitalWrite(stepPin, HIGH);
-    delay(100);
+    delay(150);
     digitalWrite(stepPin, LOW);
-    delay(100);
+    delay(150);
   }
 
   Serial.print("Motor moved by: ");

@@ -50,22 +50,21 @@ void loop() {
       servo2.write(servo2left);        
       Serial.print("Servos moved left");
 
-    }else if (input.startsWith("r")) {
+    } else if (input.startsWith("r")) {
       servo1.write(servo1right);     
       servo2.write(servo2right);        
       Serial.print("Servos moved right");
 
-    }else if (input.startsWith("s ")) {
+    } else if (input.startsWith("s ")) {
       angle = input.substring(2).toInt();
       if (angle > 180) angle = 180; 
       for(int i = 0; i < angle; i++){
         servoBig.write(i); 
         delay(15);
       }  
-    
       Serial.print("Big servo moved");
 
-    }else if (input.startsWith("s1 ")) {
+    } else if (input.startsWith("s1 ")) {
       angle1 = input.substring(3).toInt();
       if (angle1 > 180) angle1 = 180; 
       //choseNeedles(servo1, servo2, angle1); //TODO: replace with number of needles needed to be up
