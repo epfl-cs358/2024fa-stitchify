@@ -3,13 +3,19 @@
 
 #define servoPin1 9 
 #define servoPin2 10 
+#define servoBigPin 11
 
-int angle1 = 0;   
-int angle2 = 0;
+int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
+
+int servo1left = 130;
+int servo2left = 130;
+int servo1right = 0;
+int servo2right = 0;
 
 Servo servo1;     
 Servo servo2;
+Servo servoBig;
 
 void setup() {
   pinMode(servoPin1, OUTPUT);  
@@ -20,6 +26,7 @@ void setup() {
 
   servo1.attach(servoPin1); 
   servo2.attach(servoPin2); 
+  servoBig.attach(servoBigPin);
 
   servo1.write(0);
   servo2.write(0); 
@@ -31,8 +38,23 @@ void loop() {
   if (Serial.available() > 0) {
     String input = Serial.readStringUntil('\n');
     input.trim(); 
+    if (input.startsWith("l")) {
+      servo1.write(servo1left);     
+      servo2.write(servo2left);        
+      Serial.print("Servos moved left");
 
-    if (input.startsWith("s1 ")) {
+    }else if (input.startsWith("r")) {
+      servo1.write(servo1right);     
+      servo2.write(servo2right);        
+      Serial.print("Servos moved right");
+
+    }else if (input.startsWith("s ")) {
+      angle = input.substring(2).toInt();
+      if (angle > 180) angle = 180;   
+      servoBig.write(angle);     
+      Serial.print("Big servo moved");
+
+    }else if (input.startsWith("s1 ")) {
       angle1 = input.substring(3).toInt();
       if (angle1 > 180) angle1 = 180;   
       servo1.write(angle1);         
