@@ -1,12 +1,19 @@
 #include <Wire.h>
 #include <Servo.h>
 
-#define servoPin1 9 
+#define servoPin1 9
 #define servoPin2 10 
 #define servoBigPin 11
 
 int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
+const int angleNeedleUp = 90;
+const int angleNeedleDown = 0;
+const int timeBetweenNeedles = 100; //TODO : replace with true value, need in milliseconds
+const int timeFromLeftTillNeedle = 100; //TODO : replace with true value, need in milliseconds
+const int timeFromRightTillNeedle = 120; //TODO : replace with true value, need in milliseconds
+const int timeFirstNeedleTillEnd = 40; //TODO : replace with true value, need in milliseconds
+int negatif = 0;
 
 int servo1left = 130;
 int servo2left = 130;
@@ -50,13 +57,18 @@ void loop() {
 
     }else if (input.startsWith("s ")) {
       angle = input.substring(2).toInt();
-      if (angle > 180) angle = 180;   
-      servoBig.write(angle);     
+      if (angle > 180) angle = 180; 
+      for(int i = 0; i < angle; i++){
+        servoBig.write(i); 
+        delay(15);
+      }  
+    
       Serial.print("Big servo moved");
 
     }else if (input.startsWith("s1 ")) {
       angle1 = input.substring(3).toInt();
-      if (angle1 > 180) angle1 = 180;   
+      if (angle1 > 180) angle1 = 180; 
+      //choseNeedles(servo1, servo2, angle1); //TODO: replace with number of needles needed to be up
       servo1.write(angle1);         
       Serial.print("Servo1 moved to: ");
       Serial.println(angle1);
@@ -65,6 +77,7 @@ void loop() {
 
       angle2 = input.substring(3).toInt();
       if (angle2 > 180) angle2 = 180;
+      //choseNeedles(servo2, servo1, angle2); //TODO: replace with number of needles needed to be up
       servo2.write(angle2); 
       Serial.print("Servo2 moved to: ");
       Serial.println(angle2);
@@ -93,5 +106,36 @@ void loop() {
     } else {
       Serial.println("Invalid command. Use 's1 x', 's2 x', or 'n x'.");
     }
+  }
+}
+
+void choseNeedles(Servo servoUp, Servo servoDown, int nbNeedles){
+  int timeUp = timeBetweenNeedles * nbNeedles;
+  servoUp.write(angleNeedleUp);
+  servoDown.write(angleNeedleDown);
+  delay(timeFirstNeedleTillEnd);
+  servoDown.write(angleNeedleUp);
+  delay(timeUp - timeFirstNeedleTillEnd);
+  servoUp.write(angleNeedleDown);
+}
+
+void knit(int lines, int startingDirection){
+
+  // knit first line where all needles are chosen
+  if(startingDirection == 0){
+    choseNeedles(servo1, servo2, 25);
+  } else {
+    choseNeedles(servo2, servo1, 25);
+  }
+
+  for(int i = 1; i < lines; i += 2){
+    if(startingDirection == 0){
+      delay(timeBetweenNeedles + timeFromLeftTillNeedle); //skip first needle
+      choseNeedles(servo2, servo1, 24); //go all the way after skipping the first needle 
+      if(i == lines - 1) return;
+      delay(timeBetweenNeedles + timeFromRightTillNeedle);
+      choseNeedles(servo1, servo2, 24);
+    }
+    
   }
 }
