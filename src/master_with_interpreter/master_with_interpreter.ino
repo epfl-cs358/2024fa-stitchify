@@ -15,9 +15,9 @@ const int timeFromRightTillNeedle = 120; //TODO : replace with true value, need 
 const int timeFirstNeedleTillEnd = 40; //TODO : replace with true value, need in milliseconds
 int negatif = 0;
 
-int servo1left = 130;
+int servo1left = 155;
 int servo2left = 130;
-int servo1right = 0;
+int servo1right = 40;
 int servo2right = 0;
 
 Servo servo1;     
@@ -84,10 +84,19 @@ void loop() {
     } else if (input.startsWith("n ")) {
       nemaAngle = input.substring(2).toInt();
       int neg = 0;
-      if (nemaAngle < 0) 
-      {
+      /*
+      servo1.write(servo1left);     
+      servo2.write(servo2left);        
+      Serial.print("Servos moved left");
+      */
+      
+      if (nemaAngle < 0) {
         nemaAngle = -nemaAngle;
         neg = 1;
+        /*servo1.write(servo1right);     
+        servo2.write(servo2right);        
+        Serial.print("Servos moved right");
+        */
       }
       int bit1 = nemaAngle >> 8;
       int bit2 = nemaAngle & 255;
