@@ -33,6 +33,11 @@ void setup() {
 
   Serial.begin(9600);
   Serial.println("Ready to receive step count.");
+
+  int switchStateRight = digitalRead(switchPinRight);
+    int switchStateLeft = digitalRead(switchPinLeft);
+    Serial.println(switchStateRight);
+    Serial.println(switchStateLeft);
 }
 
 void loop() {
@@ -69,17 +74,30 @@ void moveMotor(int neg, int steps) {
 
   for (int i = 0; i < steps; i++) {
     int switchStateRight = digitalRead(switchPinRight);
-    int switchStateLeft = digitalRead(switchPinLeft); 
+    int switchStateLeft = digitalRead(switchPinLeft);
     if (switchStateRight == HIGH or switchStateLeft == HIGH) {
+      for(int j = 0; j < 45; j++){ //if switch activated, take a few steps back to deactivate it 
+        if (neg == 0) {
+          digitalWrite(dirPin, LOW); 
+        } else {
+          digitalWrite(dirPin, HIGH); 
+        }
+        stepsPosNeg = -stepsPosNeg;
+        currentSteps += stepsPosNeg;
+        digitalWrite(stepPin, HIGH);
+        delay(200);
+        digitalWrite(stepPin, LOW);
+        delay(200);
+      }
       return; //switch is pressed == reached end of the bed
-    } 
+    }
 
     currentSteps += stepsPosNeg;
 
     digitalWrite(stepPin, HIGH);
-    delayMicroseconds(500);
+    delay(150);
     digitalWrite(stepPin, LOW);
-    delayMicroseconds(500);
+    delay(150);
   }
 
   Serial.print("Motor moved by: ");
