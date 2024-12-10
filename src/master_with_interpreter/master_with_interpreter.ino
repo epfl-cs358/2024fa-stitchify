@@ -7,11 +7,10 @@
 
 int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
-int negatif = 0;
-int maxSteps = 2000;
+int maxSteps = 3000;
 
-int servo1Left = 155;
-int servo2Left = 130;
+int servo1Left = 150;
+int servo2Left = 110;
 int servo1Right = 40;
 int servo2Right = 0;
 int bigServoRight = 0;
@@ -24,6 +23,7 @@ Servo servoBig;
 void setup() {
   pinMode(servoPin1, OUTPUT);  
   pinMode(servoPin2, OUTPUT);  
+  pinMode(servoBigPin, OUTPUT);
 
   Serial.begin(9600);           
   Wire.begin();              
@@ -34,6 +34,9 @@ void setup() {
 
   servo1.write(0);
   servo2.write(0); 
+  servoBig.write(0);
+
+  delay(1000); //delay to solve big servo weird behavior
 
   Serial.println("Enter commands: s1 x, s2 x, or n x (e.g., 's1 90').");
 }
@@ -44,12 +47,14 @@ void loop() {
     input.trim(); 
     if (input.startsWith("l")) {
       servo1.write(servo1Left);     
-      servo2.write(servo2Left);        
+      servo2.write(servo2Left);     
+      servoBig.write(bigServoLeft);   
       Serial.print("Servos moved left");
 
     } else if (input.startsWith("r")) {
       servo1.write(servo1Right);     
-      servo2.write(servo2Right);        
+      servo2.write(servo2Right);    
+      servoBig.write(bigServoRight);       
       Serial.print("Servos moved right");
 
     } else if (input.startsWith("s ")) {
@@ -79,16 +84,12 @@ void loop() {
     } else if (input.startsWith("n ")) {
       nemaAngle = input.substring(2).toInt();
       int neg = 0;
-      servo1.write(servo1);     
-      servo2.write(servo2Left);        
-      Serial.print("Servos moved left");
+      moveServoDirection(neg);
       
       if (nemaAngle < 0) {
         nemaAngle = -nemaAngle;
         neg = 1;
-        servo1.write(servo1Right);     
-        servo2.write(servo2Right);        
-        Serial.print("Servos moved right");
+        moveServoDirection(neg);
       }
       int bit1 = nemaAngle >> 8;
       int bit2 = nemaAngle & 255;
@@ -97,6 +98,7 @@ void loop() {
       Serial.println(neg);
       Serial.println((bit1 << 8) + bit2);
 
+      delay(500);
       Wire.beginTransmission(8);
       Wire.write(neg); 
       Wire.write(bit1); 
@@ -104,11 +106,15 @@ void loop() {
       Wire.endTransmission();
 
     } else if (input.startsWith("+ knit ")) {
-      int nbLines = input.substring(7).toInt();
+      Serial.print("knitting lines negative : ");
+      int nbLines = input.substring(6).toInt();
+      Serial.println(nbLines);
       knit(nbLines, 0);
     
     } else if (input.startsWith("- knit ")) {
-      int nbLines = input.substring(7).toInt();
+      Serial.print("knitting lines negative : ");
+      int nbLines = input.substring(6).toInt();
+      Serial.println(nbLines);
       knit(nbLines, 1);
 
     } else {
@@ -122,8 +128,9 @@ void knit(int lines, int startingDirection){
 
   for(int i = 0; i < lines; i++){
     moveServoDirection(neg);
+    delay(500);
     knitOneLine(neg);
-    neg = -neg;
+    neg = neg == 0 ? 1 : 0;
   }    
 }
 
@@ -132,7 +139,7 @@ void knitOneLine(int neg){
   int bit2 = maxSteps & 255;
   Wire.beginTransmission(8);
   Wire.write(neg); 
-  Wire.write(bit1); 
+  Wire.write(bit1);
   Wire.write(bit2);
   Wire.endTransmission();
 }
@@ -141,8 +148,10 @@ void moveServoDirection(int neg){
   if(neg == 0){
     servo1.write(servo1Right);     
     servo2.write(servo2Right);  
+    servoBig.write(bigServoRight);   
   } else {
     servo1.write(servo1Left);     
-    servo2.write(servo2Left);  
+    servo2.write(servo2Left); 
+    servoBig.write(bigServoLeft);    
   }
 }
