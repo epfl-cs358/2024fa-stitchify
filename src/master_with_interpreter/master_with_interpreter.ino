@@ -4,6 +4,7 @@
 #define servoPin1 9 
 #define servoPin2 10 
 #define servoBigPin 11
+#define COMM_RECEIVE_PIN 12
 
 int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
@@ -20,6 +21,8 @@ Servo servoBig;
 void setup() {
   pinMode(servoPin1, OUTPUT);  
   pinMode(servoPin2, OUTPUT);  
+
+  pinMode(COMM_RECEIVE_PIN, INPUT);
 
   Serial.begin(9600);           
   Wire.begin();              
@@ -89,6 +92,13 @@ void moveStep(String input)
     Wire.write(bit2);
     Wire.endTransmission();
 
+    
+    while (digitalRead(COMM_RECEIVE_PIN) != HIGH) {
+      Serial.println('x');
+    }
+    // Signal received from slave, hence everythig okey and we can continue next row
+    Serial.println("Signal received from slave");
+
   } else {
     Serial.println("Invalid command. Use 's1 x', 's2 x', or 'n x'.");
   }
@@ -98,27 +108,27 @@ void moveRow(String input)
 {
   if (input.startsWith("kr")) {
     moveStep("r");
-    delay(5000);
+    delay(1000);
     moveStep("s 135");
-    delay(5000);
+    delay(1000);
     moveStep("n 295");
-    delay(5000);
+    delay(1000);
     moveStep("s 100");
-    delay(5000);
+    delay(1000);
     moveStep("n 2500");
-    delay(5000);
+    delay(1000);
   }
   else if (input.startsWith("kl")) {
     moveStep("l");
-    delay(5000);
+    delay(1000);
     moveStep("s 100");
-    delay(5000);
+    delay(1000);
     moveStep("n -250");
-    delay(5000);
+    delay(1000);
     moveStep("s 135");
-    delay(5000);
+    delay(1000);
     moveStep("n -2500");
-    delay(2000);
+    delay(1000);
     moveStep("n -45");
   }
   else
@@ -147,7 +157,3 @@ void loop() {
     }
   }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 0b514b61e1f5a10d915d1cc3260c4127b6742482
