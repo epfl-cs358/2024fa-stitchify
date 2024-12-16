@@ -9,7 +9,7 @@ int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
 
 int servo1left = 130;
-int servo2left = 130;
+int servo2left = 130; //150
 int servo1right = 0;
 int servo2right = 0;
 
@@ -99,11 +99,11 @@ void moveRow(String input)
   if (input.startsWith("kr")) {
     moveStep("r");
     delay(5000);
-    moveStep("s 110");
+    moveStep("s 135");
     delay(5000);
-    moveStep("n 250");
+    moveStep("n 295");
     delay(5000);
-    moveStep("s 75");
+    moveStep("s 100");
     delay(5000);
     moveStep("n 2500");
     delay(5000);
@@ -111,13 +111,15 @@ void moveRow(String input)
   else if (input.startsWith("kl")) {
     moveStep("l");
     delay(5000);
-    moveStep("s 75");
+    moveStep("s 100");
     delay(5000);
     moveStep("n -250");
     delay(5000);
-    moveStep("s 110");
+    moveStep("s 135");
     delay(5000);
     moveStep("n -2500");
+    delay(2000);
+    moveStep("n -45");
   }
   else
   {
