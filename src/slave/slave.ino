@@ -76,7 +76,7 @@ void moveMotor(int neg, int steps) {
     int switchStateRight = digitalRead(switchPinRight);
     int switchStateLeft = digitalRead(switchPinLeft);
     if (switchStateRight == HIGH or switchStateLeft == HIGH) {
-      for(int j = 0; j < 45; j++){ //if switch activated, take a few steps back to deactivate it 
+      for(int j = 0; j < 15; j++){ //if switch activated, take a few steps back to deactivate it 
         if (neg == 0) {
           digitalWrite(dirPin, LOW); 
         } else {
@@ -95,9 +95,9 @@ void moveMotor(int neg, int steps) {
     currentSteps += stepsPosNeg;
 
     digitalWrite(stepPin, HIGH);
-    delay(150);
+    delay(1000);
     digitalWrite(stepPin, LOW);
-    delay(150);
+    delay(1000);
   }
 
   Serial.print("Motor moved by: ");
