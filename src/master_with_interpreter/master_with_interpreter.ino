@@ -9,17 +9,17 @@ int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
 
 int servo1lefttake = 130;
-int servo2lefttake = 130;
+int servo2lefttake = 180;
 int servo1righttake = 0;
-int servo2righttake = 0;
+int servo2righttake = 50;
 
 int servo1leftskip = 130;
-int servo2leftskip = 130;
+int servo2leftskip = 180;
 int servo1rightskip = 0;
-int servo2rightskip = 0;
+int servo2rightskip = 50;
 
-int servoleft = 135;
-int servoright = 100;
+int servoleft = 70;
+int servoright = 1;
 
 int firstNeedleDistanceLeft = 295;
 int firstNeedleDistanceRight = 250;
@@ -43,7 +43,7 @@ void setup() {
 
   servo1.attach(servoPin1); 
   servo2.attach(servoPin2); 
-  servoBig.attach(servoBigPin);
+  servoBig.attach(servoBigPin,900,2200);
 
   servo1.write(0);
   servo2.write(0); 
@@ -151,7 +151,13 @@ void moveRow(String input)
   else if(input.startsWith("fr")) {
     goFirstRight();
   }
-  else if(input.startsWith("olt ")) {
+  else if(input.startsWith("ar")) {
+    moveStep("n "+String(firstNeedleDistanceLeft));
+  }
+  else if(input.startsWith("al")) {
+    moveStep("n "+String(firstNeedleDistanceRight));
+  }
+  else if(input.startsWith("lt ")) {
     int nNeedles = input.substring(4).toInt();
     servo1.write(servo1lefttake);     
     servo2.write(servo2lefttake);        
@@ -159,7 +165,7 @@ void moveRow(String input)
     moveStep("n "+String(needleSteps * nNeedles));
     delay(5000); //TODO: not needed if security measures used
   }
-  else if(input.startsWith("ols ")) {
+  else if(input.startsWith("ls ")) {
     int nNeedles = input.substring(4).toInt();
     servo1.write(servo1leftskip);     
     servo2.write(servo2leftskip);    
@@ -168,7 +174,7 @@ void moveRow(String input)
     delay(5000); //TODO: not needed if security measures used    
 
   }
-  else if(input.startsWith("ort ")) {
+  else if(input.startsWith("rt ")) {
     int nNeedles = input.substring(4).toInt();
     servo1.write(servo1righttake);     
     servo2.write(servo2righttake);     
@@ -177,7 +183,7 @@ void moveRow(String input)
     delay(5000); //TODO: not needed if security measures used 
 
   }
-  else if(input.startsWith("ors ")) {
+  else if(input.startsWith("rs ")) {
     int nNeedles = input.substring(4).toInt();
     servo1.write(servo1rightskip);     
     servo2.write(servo1rightskip);   
