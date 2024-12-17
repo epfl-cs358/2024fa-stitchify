@@ -7,7 +7,11 @@
 
 const int switchPinRight = 11;
 const int switchPinLeft = 10;
-int currentSteps = 0, targetSteps = 0, stepsPosNeg = 0;
+
+const int expectedPosLeft = 0;
+const int expectedPosRight = 0;
+
+int currentPos = 0, targetSteps = 0, stepsPosNeg = 0;
 
 void setup() 
 {
@@ -61,7 +65,7 @@ void receiveData(int byteCount)
   moveMotor(neg, targetSteps);
 }
 
-void backUp()
+void backUp(int neg)
 {
   if (neg == 0) 
   {
@@ -73,7 +77,7 @@ void backUp()
 
     for(int j = 0; j < 45; j++)
     { 
-      currentSteps -= stepsPosNeg;
+      currentPos -= stepsPosNeg;
       digitalWrite(stepPin, HIGH);
       delay(200);
       digitalWrite(stepPin, LOW);
@@ -97,27 +101,45 @@ void moveMotor(int neg, int steps) {
     digitalWrite(dirPin, LOW); 
   }
 
+  bool switchPressedAsExpected = 1;
   for (int i = 0; i < steps; i++) {
 
     int switchStateRight = digitalRead(switchPinRight);
     int switchStateLeft = digitalRead(switchPinLeft);
     if (switchStateRight == HIGH or switchStateLeft == HIGH) {
-      backUp();
+
+      if(switchStateRight == HIGH && abs(currentPos - expectedPosRight)>2) 
+      {
+        switchPressedAsExpected = 0;
+      }
+      if(switchStateLeft == HIGH && abs(currentPos!=expectedPosLeft)>2) 
+      {
+        switchPressedAsExpected = 0;
+      }
+
+      backUp(neg);
       break;
     }
 
-    currentSteps += stepsPosNeg;
+    currentPos += stepsPosNeg;
     digitalWrite(stepPin, HIGH);
     delay(150);
     digitalWrite(stepPin, LOW);
     delay(150);
   }
 
-  //we can only send signal if pressed switch as expected
+  /*
+  //We can for example only send signal if switched pressed as expected
+  if(switchPressedAsExpected) 
+  {
+    sendSignalToMaster();
+  }
+  */
+
   sendSignalToMaster();
 
   Serial.print("Motor moved by: ");
   Serial.println(steps);
   Serial.print("Motor at Pos: ");
-  Serial.println(currentSteps);
+  Serial.println(currentPos);
 }
