@@ -14,18 +14,18 @@ int servo1righttake = 0;
 int servo2righttake = 50;
 
 int servo1leftskip = 130;
-int servo2leftskip = 180;
-int servo1rightskip = 0;
+int servo2leftskip = 50;
+int servo1rightskip = 130;
 int servo2rightskip = 50;
 
 int servoleft = 70;
 int servoright = 1;
 
-int firstNeedleDistanceLeft = 295;
+int firstNeedleDistanceLeft = 270;
 int firstNeedleDistanceRight = 250;
 
 int carriageSteps = 2500;
-int needleSteps = 5;
+int needleSteps = 42;
 
 int delayBigServo = 1000;
 int delaySmallServo = 500;
