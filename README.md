@@ -3,13 +3,14 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
+Fueled by curiosity, we worked to create a knitting machine from start to finish. We based our work on the open source project OpenKnit, and spent a lot of time analysing and researching about how to go about in creating our machine. We obviously didn't have 5-6 years like OpenKnit did, so we had to simplify OpenKnit's design by a lot in order to fit the time frame of 10 weeks.
 <!-- High-level structure -->
 ## Fusion Designs
-
 Below is the very first overall design on Fusion that was created for this project : 
 ![image](https://github.com/user-attachments/assets/2c703827-1e71-48b2-8ce7-e5d362c67b4f)
-
+After numerous trials and errors, we finally settled on the final prototype Fusion design as seen below, which can also be found in the repository : 
+![image](https://github.com/user-attachments/assets/b0767661-cf87-4043-b2c7-fcce12c3b953)
+![image](https://github.com/user-attachments/assets/86f9496e-424e-49e2-ae00-a32b2dc6d54e)
 
 ## Electrical Designs 
 Below is the initial design incorporating multiple stepper motors to improve torque, 1 ESP32-CAM for computer vision (which wasn't implemented in our project in the end), the Wemos D1 R32, 16-channel servo controller and the Arduino Uno :
@@ -25,9 +26,13 @@ Below is the current project's Fritzing sketch :
  * **Flatbed** :
  * **Yarn feeder, slider** :
  * **Stepper motor and belt pincher** :
+ * **Comb** :
 
 ## Code Implementation
 The code implementation included the master-slave data sharing channel and management, the controller for the stepper motor (slave) and servo motors (master) as well as a simple command interpreter. 
+
+## Knitting Process
+
 
 <!-- Issues -->
 ## Issues and Decisions Taken
@@ -51,7 +56,7 @@ Some of the issues we encountered during our prototyping and the decisions taken
 
 **9. Switches** : They were originally also supposed to be fixed on the side panels, but further consideration showed they would hinder the pulley and stepper motor supports. In the end, they are fixed on the bed.
 
-**10. ESP32-CAM vs Wemos D1 R32 vs Arduino Uno** : We originally wanted to use the ESP32-CAM as it had built-in wifi connectivity and would allow wireless communication with the main Arduino Uno, in addition to its small size. However, we discovered that in the way we wanted to use it, there would only be a very small number of usable pins, which wasn't enough at all. We decided to look into the Wemos R32, which also had built-in wifi and looked a lot like an Arduino Uno. But there was a lot of pins adaptation issues as the Wemos uses a different pin naming pattern. In the end, we just decided to use an additional Arduino Uno and leave the Wemos connectivity for further development. 
+**10. ESP32-CAM vs Wemos D1 R32 vs Arduino Uno** : We originally wanted to use the ESP32-CAM as it had built-in wifi connectivity and would allow wireless communication with the main Arduino Uno, in addition to its small size. However, we discovered that in the way we wanted to use it, there would only be a very small number of usable pins, which wasn't enough at all. We decided to look into the Wemos R32, which also had built-in wifi and looked a lot like an Arduino Uno. But there was a lot of pins adaptation issues as the Wemos uses a different pin naming pattern. In the end, we just decided to use an additional Arduino Uno for prototype 1 and will try to use the Wemos R1 D32 for connectivity with the webapp. 
 
 <!-- Implementation -->
 ## Step-by-step 
