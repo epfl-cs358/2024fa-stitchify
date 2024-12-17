@@ -27,7 +27,7 @@ Below is the current project's Fritzing sketch :
  * **Flatbed** :
  * **Yarn feeder, slider** :
  * **Stepper motor and belt pincher** :
- * **Comb** :
+ * **Comb** : First tried a prototype using paper clips to see how it could work, then we made a comb with a hole to allow the addition of a weight. 
 
 ## Code Implementation
 The code implementation included the master-slave data sharing channel and management, the controller for the stepper motor (slave) and servo motors (master) as well as a simple command interpreter. 
