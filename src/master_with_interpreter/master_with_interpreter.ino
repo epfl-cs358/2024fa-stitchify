@@ -8,10 +8,27 @@
 int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
 
-int servo1left = 130;
-int servo2left = 130; //150
-int servo1right = 0;
-int servo2right = 0;
+int servo1lefttake = 130;
+int servo2lefttake = 130;
+int servo1righttake = 0;
+int servo2righttake = 0;
+
+int servo1leftskip = 130;
+int servo2leftskip = 130;
+int servo1rightskip = 0;
+int servo2rightskip = 0;
+
+int servoleft = 135;
+int servoright = 100;
+
+int firstNeedleDistanceLeft = 295;
+int firstNeedleDistanceRight = 250;
+
+int carriageSteps = 2500;
+int needleSteps = 5;
+
+int delayBigServo = 1000;
+int delaySmallServo = 500;
 
 Servo servo1;     
 Servo servo2;
@@ -38,35 +55,34 @@ void setup() {
 void moveStep(String input)
 {
   if (input.startsWith("l")) {
-    servo1.write(servo1left);     
-    servo2.write(servo2left);        
+    servo1.write(servo1lefttake);     
+    servo2.write(servo2lefttake);        
     Serial.print("Servos moved left");
 
   }else if (input.startsWith("r")) {
-    servo1.write(servo1right);     
-    servo2.write(servo2right);        
+    servo1.write(servo1righttake);     
+    servo2.write(servo2righttake);        
     Serial.print("Servos moved right");
 
   }else if (input.startsWith("s ")) {
     angle = input.substring(2).toInt();
-    if (angle > 180) angle = 180;   
     servoBig.write(angle);     
     Serial.print("Big servo moved");
 
   }else if (input.startsWith("s1 ")) {
-    angle1 = input.substring(3).toInt();
-    if (angle1 > 180) angle1 = 180;   
-    servo1.write(angle1);         
+    angle = input.substring(3).toInt();
+    if (angle > 180) angle = 180;   
+    servo1.write(angle);         
     Serial.print("Servo1 moved to: ");
-    Serial.println(angle1);
+    Serial.println(angle);
 
   } else if (input.startsWith("s2 ")) {
 
-    angle2 = input.substring(3).toInt();
-    if (angle2 > 180) angle2 = 180;
-    servo2.write(angle2); 
+    angle = input.substring(3).toInt();
+    if (angle > 180) angle = 180;
+    servo2.write(angle); 
     Serial.print("Servo2 moved to: ");
-    Serial.println(angle2);
+    Serial.println(angle);
 
   } else if (input.startsWith("n ")) {
     nemaAngle = input.substring(2).toInt();
@@ -94,32 +110,78 @@ void moveStep(String input)
   }
 }
 
+void goFirstRight()
+{
+  moveStep("r");
+  moveStep("s "+String(servoleft));
+  delay(delayBigServo);
+  moveStep("n "+String(firstNeedleDistanceRight));
+  delay(5000); //not needed if security measures used
+  moveStep("s "+String(servoright));
+  delay(delayBigServo);
+}
+
+void goFirstLeft()
+{
+  moveStep("l");
+  moveStep("s "+String(servoright));
+  delay(delayBigServo);
+  moveStep("n -"+String(firstNeedleDistanceLeft));
+  delay(5000); //not needed if security measures used
+  moveStep("s "+String(servoleft));
+  delay(delayBigServo);
+}
+
 void moveRow(String input)
 {
+  Serial.println(input);
   if (input.startsWith("kr")) {
-    moveStep("r");
-    delay(5000);
-    moveStep("s 135");
-    delay(5000);
-    moveStep("n 295");
-    delay(5000);
-    moveStep("s 100");
-    delay(5000);
-    moveStep("n 2500");
-    delay(5000);
+    goFirstRight();
+    moveStep("n "+String(carriageSteps));
+    delay(5000); //TODO: not needed if security measures used
   }
-  else if (input.startsWith("kl")) {
-    moveStep("l");
-    delay(5000);
-    moveStep("s 100");
-    delay(5000);
-    moveStep("n -250");
-    delay(5000);
-    moveStep("s 135");
-    delay(5000);
-    moveStep("n -2500");
-    delay(2000);
-    moveStep("n -45");
+  else if(input.startsWith("kl")) {
+    goFirstLeft();
+    moveStep("n -"+String(carriageSteps));
+    delay(5000); //TODO: not needed if security measures used
+  }
+  else if(input.startsWith("fl")) {
+    goFirstLeft();
+  }
+  else if(input.startsWith("fr")) {
+    goFirstRight();
+  }
+  else if(input.startsWith("olt")) {
+    servo1.write(servo1lefttake);     
+    servo2.write(servo2lefttake);        
+    delay(delaySmallServo);
+    moveStep("n "+String(needleSteps));
+    delay(5000); //TODO: not needed if security measures used
+  }
+  else if(input.startsWith("ols")) {
+
+    servo1.write(servo1leftskip);     
+    servo2.write(servo2leftskip);    
+    delay(delaySmallServo);
+    moveStep("n "+ String(needleSteps));
+    delay(5000); //TODO: not needed if security measures used    
+
+  }
+  else if(input.startsWith("ort")) {
+    servo1.write(servo1righttake);     
+    servo2.write(servo2righttake);     
+    delay(delaySmallServo);
+    moveStep("n "+String(needleSteps));
+    delay(5000); //TODO: not needed if security measures used 
+
+  }
+  else if(input.startsWith("ors")) {
+    servo1.write(servo1rightskip);     
+    servo2.write(servo1rightskip);   
+    delay(delaySmallServo);
+    moveStep("n "+String(needleSteps));
+    delay(5000); //TODO: not needed if security measures used
+
   }
   else
   {
@@ -136,9 +198,7 @@ void loop() {
       for(int i=0; i<numberRows; i++)
       {
         moveRow("kl");
-        delay(5000);
         moveRow("kr");
-        delay(5000);
       }
     }
     else
@@ -147,7 +207,3 @@ void loop() {
     }
   }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 0b514b61e1f5a10d915d1cc3260c4127b6742482
