@@ -9,6 +9,7 @@ Fueled by curiosity, we worked to create a knitting machine from start to finish
 Below is the very first overall design on Fusion that was created for this project : 
 ![image](https://github.com/user-attachments/assets/2c703827-1e71-48b2-8ce7-e5d362c67b4f)
 After numerous trials and errors, we finally settled on the final prototype Fusion design as seen below, which can also be found in the repository : 
+
 ![image](https://github.com/user-attachments/assets/b0767661-cf87-4043-b2c7-fcce12c3b953)
 ![image](https://github.com/user-attachments/assets/86f9496e-424e-49e2-ae00-a32b2dc6d54e)
 
