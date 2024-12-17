@@ -151,35 +151,38 @@ void moveRow(String input)
   else if(input.startsWith("fr")) {
     goFirstRight();
   }
-  else if(input.startsWith("olt")) {
+  else if(input.startsWith("olt ")) {
+    int nNeedles = input.substring(4).toInt();
     servo1.write(servo1lefttake);     
     servo2.write(servo2lefttake);        
     delay(delaySmallServo);
-    moveStep("n "+String(needleSteps));
+    moveStep("n "+String(needleSteps * nNeedles));
     delay(5000); //TODO: not needed if security measures used
   }
-  else if(input.startsWith("ols")) {
-
+  else if(input.startsWith("ols ")) {
+    int nNeedles = input.substring(4).toInt();
     servo1.write(servo1leftskip);     
     servo2.write(servo2leftskip);    
     delay(delaySmallServo);
-    moveStep("n "+ String(needleSteps));
+    moveStep("n "+ String(needleSteps * nNeedles));
     delay(5000); //TODO: not needed if security measures used    
 
   }
-  else if(input.startsWith("ort")) {
+  else if(input.startsWith("ort ")) {
+    int nNeedles = input.substring(4).toInt();
     servo1.write(servo1righttake);     
     servo2.write(servo2righttake);     
     delay(delaySmallServo);
-    moveStep("n "+String(needleSteps));
+    moveStep("n "+String(needleSteps * nNeedles));
     delay(5000); //TODO: not needed if security measures used 
 
   }
-  else if(input.startsWith("ors")) {
+  else if(input.startsWith("ors ")) {
+    int nNeedles = input.substring(4).toInt();
     servo1.write(servo1rightskip);     
     servo2.write(servo1rightskip);   
     delay(delaySmallServo);
-    moveStep("n "+String(needleSteps));
+    moveStep("n "+String(needleSteps * nNeedles));
     delay(5000); //TODO: not needed if security measures used
 
   }
