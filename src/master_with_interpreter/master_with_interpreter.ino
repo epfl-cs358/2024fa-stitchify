@@ -124,7 +124,6 @@ void moveStep(String input)
     while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
       Serial.println("x");
     }
-    // Signal received from slave, hence everythig okey and we can continue next row
     Serial.println("Signal received from slave");
 
   } 
@@ -140,7 +139,6 @@ void goFirstRight()
   moveStep("s "+String(servoleft));
   delay(delayBigServo);
   moveStep("n "+String(firstNeedleDistanceRight));
-  delay(5000); //not needed if security measures used
   moveStep("s "+String(servoright));
   delay(delayBigServo);
 }
@@ -151,7 +149,6 @@ void goFirstLeft()
   moveStep("s "+String(servoright));
   delay(delayBigServo);
   moveStep("n -"+String(firstNeedleDistanceLeft));
-  delay(5000); //not needed if security measures used
   moveStep("s "+String(servoleft));
   delay(delayBigServo);
 }
@@ -162,12 +159,10 @@ void moveRow(String input)
   if (input.startsWith("kr")) {
     goFirstRight();
     moveStep("n "+String(carriageSteps));
-    delay(5000); //TODO: not needed if security measures used
   }
   else if(input.startsWith("kl")) {
     goFirstLeft();
     moveStep("n -"+String(carriageSteps));
-    delay(5000); //TODO: not needed if security measures used
   }
   else if(input.startsWith("fl")) {
     goFirstLeft();
