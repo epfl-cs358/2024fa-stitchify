@@ -11,10 +11,13 @@
 int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
 
+
 int servo1lefttake = 130;
+
 int servo2lefttake = 180;
 int servo1righttake = 0;
 int servo2righttake = 50;
+
 
 int servo1leftskip = 130;
 int servo2leftskip = 50;
@@ -33,6 +36,7 @@ int needleSteps = 42;
 int delayBigServo = 1000;
 int delaySmallServo = 500;
 int delaySending = 500;
+
 
 Servo servo1;     
 Servo servo2;
@@ -101,6 +105,7 @@ void moveStep(String input)
     int bit1 = nemaAngle >> 8;
     int bit2 = nemaAngle & 255;
 
+
     Serial.print("Sending to NEMA motor: ");
     Serial.println(neg);
     Serial.println((bit1 << 8) + bit2);
@@ -111,6 +116,7 @@ void moveStep(String input)
     Wire.write(bit2);
     Wire.endTransmission();
 
+
     delay(delaySending);
     while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
       Serial.println("x");
@@ -120,6 +126,7 @@ void moveStep(String input)
 
   } 
   else {
+
     Serial.println("Invalid command. Use 's1 x', 's2 x', or 'n x'.");
   }
 }
@@ -153,18 +160,21 @@ void moveRow(String input)
     goFirstRight();
     moveStep("n "+String(carriageSteps));
     delay(5000); //TODO: not needed if security measures used
+
   }
   else if(input.startsWith("kl")) {
     goFirstLeft();
     moveStep("n -"+String(carriageSteps));
     delay(5000); //TODO: not needed if security measures used
   }
+
   else if(input.startsWith("fl")) {
     goFirstLeft();
   }
   else if(input.startsWith("fr")) {
     goFirstRight();
   }
+
   else if(input.startsWith("ar")) {
     moveStep("n "+String(firstNeedleDistanceLeft));
   }
@@ -198,6 +208,7 @@ void moveRow(String input)
     servo2.write(servo1rightskip);   
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
+
   }
   else
   {

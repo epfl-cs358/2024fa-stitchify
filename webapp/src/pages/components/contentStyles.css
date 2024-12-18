@@ -1,0 +1,37 @@
+.content-container {
+  margin-bottom: 30px;
+}
+
+.content-title {
+  font-family: "Inter", sans-serif;
+  font-size: 1.5rem;
+  color: #525252;
+  font-weight: 600;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.page-description {
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  color: #525252;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.content-children {
+  width: 100%;
+  color: #525252;
+  padding-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .content-title {
+    font-size: 1.3rem;
+  }
+
+  .page-description {
+    font-size: 0.9rem;
+  }
+}
