@@ -1,0 +1,114 @@
+.about-container {
+  color: #1a2b3c;
+  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.team-member {
+  flex-basis: calc(33.333% - 10px);
+  text-align: center;
+  padding: 0px;
+  background-color: #f9fafb;
+  border-radius: 6px;
+}
+
+.team-member h4 {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.team-member p {
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.objectives-list li {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.objectives-list li strong {
+  color: #81c4eb;
+  margin-right: 10px;
+  min-width: 120px;
+  font-size: 0.9rem;
+}
+
+.objectives-list li p {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.tech-stack {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tech-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  background-color: #f9fafb;
+  border-radius: 6px;
+}
+
+.tech-item h4 {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.tech-item p {
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+.roadmap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roadmap-list li {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.roadmap-phase {
+  color: #81c4eb;
+  font-weight: 600;
+  margin-right: 10px;
+  min-width: 120px;
+  font-size: 0.9rem;
+}
+
+.roadmap-list li p {
+  font-size: 0.8rem;
+  margin: 0;
+}

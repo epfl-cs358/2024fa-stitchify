@@ -1,33 +1,33 @@
-/*
-Slave program that will receive data wired from the Master program. Will notably control the stepper motor with
-the number of steps passed from the Master and also stop movement when the switch is activated. 
-*/
-
 #include <Wire.h>
 
 #define stepPin 2  
 #define dirPin  5  
 #define enablePin 8 
-//#define yMinusPin  
-//#define yPlusPin 14
-const int switchPinRight = 11;
-const int switchPinLeft = 10;
-int currentSteps = 0;
-int targetSteps = 0;
+#define COMM_SEND_PIN 11
 
-void setup() {
+const int switchPinRight = 12;
+const int switchPinLeft = 13;
+
+const int expectedPosLeft = 0;
+const int expectedPosRight = 0;
+
+int currentPos = 0, targetSteps = 0, stepsPosNeg = 0;
+
+void setup() 
+{
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   pinMode(enablePin, OUTPUT);
+
   pinMode(switchPinRight, INPUT_PULLUP);
   pinMode(switchPinLeft, INPUT_PULLUP);
 
- // pinMode(yMinusPin, INPUT_PULLUP);
- // pinMode(yPlusPin, INPUT_PULLUP);
+  pinMode(COMM_SEND_PIN, OUTPUT);
+  digitalWrite(COMM_SEND_PIN, LOW);
+
 
   digitalWrite(enablePin, LOW);
 
-  //Starts connection with the Master, awaits data receipt
   Wire.begin(8);
   Wire.onReceive(receiveData);
 
@@ -35,22 +35,27 @@ void setup() {
   Serial.println("Ready to receive step count.");
 
   int switchStateRight = digitalRead(switchPinRight);
-    int switchStateLeft = digitalRead(switchPinLeft);
-    Serial.println(switchStateRight);
-    Serial.println(switchStateLeft);
+  int switchStateLeft = digitalRead(switchPinLeft);
+  Serial.println(switchStateRight);
+  Serial.println(switchStateLeft);
 }
 
-void loop() {
+void loop() 
+{
 }
 
-/*
-Method that will be called when the slave receives data from the master
-*/
-void receiveData(int byteCount) {
+void sendSignalToMaster() {
+  digitalWrite(COMM_SEND_PIN, HIGH);
+}
+
+void receiveData(int byteCount) 
+{
+  digitalWrite(COMM_SEND_PIN, LOW);
+  
   int neg = 0, steps = 0;
   neg = Wire.read();
   steps = Wire.read();
-  steps = (steps << 8) + Wire.read(); //shift first 8 bits received and add the last 8 bits at the end
+  steps = (steps << 8) + Wire.read();
 
   Serial.print("Received steps: ");
   Serial.println(steps);
@@ -60,48 +65,82 @@ void receiveData(int byteCount) {
   moveMotor(neg, targetSteps);
 }
 
-/*
-Method that will move the stepper motor and also manages negative steps and when the switch is activated
-*/
+void backUp(int neg)
+{
+  if (neg == 0) 
+  {
+    digitalWrite(dirPin, LOW); 
+    } 
+    else {
+      digitalWrite(dirPin, HIGH); 
+    }
+
+    for(int j = 0; j < 45; j++)
+    { 
+      currentPos -= stepsPosNeg;
+      digitalWrite(stepPin, HIGH);
+      delay(200);
+      digitalWrite(stepPin, LOW);
+      delay(200);
+    }
+}
+
 void moveMotor(int neg, int steps) {
-  int stepsPosNeg = neg == 1 ? -1 : 1;
+  stepsPosNeg = neg == 1 ? -1 : 1;
 
-  if (steps == 0) return;
-  else if (neg == 0) {
-    digitalWrite(dirPin, HIGH); } 
-  else {
-    digitalWrite(dirPin, LOW); }
+  if (steps == 0) 
+  {
+    return;
+  }
+  else if (neg == 0) 
+  {
+    digitalWrite(dirPin, HIGH); 
+  } 
+  else 
+  {
+    digitalWrite(dirPin, LOW); 
+  }
 
+  bool switchPressedAsExpected = 1;
   for (int i = 0; i < steps; i++) {
+
     int switchStateRight = digitalRead(switchPinRight);
     int switchStateLeft = digitalRead(switchPinLeft);
     if (switchStateRight == HIGH or switchStateLeft == HIGH) {
-      for(int j = 0; j < 45; j++){ //if switch activated, take a few steps back to deactivate it 
-        if (neg == 0) {
-          digitalWrite(dirPin, LOW); 
-        } else {
-          digitalWrite(dirPin, HIGH); 
-        }
-        stepsPosNeg = -stepsPosNeg;
-        currentSteps += stepsPosNeg;
-        digitalWrite(stepPin, HIGH);
-        delay(200);
-        digitalWrite(stepPin, LOW);
-        delay(200);
+
+      if(switchStateRight == HIGH && abs(currentPos - expectedPosRight)>2) 
+      {
+        switchPressedAsExpected = 0;
       }
-      return; //switch is pressed == reached end of the bed
+      if(switchStateLeft == HIGH && abs(currentPos!=expectedPosLeft)>2) 
+      {
+        switchPressedAsExpected = 0;
+      }
+
+      backUp(neg);
+      break;
     }
 
-    currentSteps += stepsPosNeg;
-
+    currentPos += stepsPosNeg;
     digitalWrite(stepPin, HIGH);
     delay(150);
     digitalWrite(stepPin, LOW);
     delay(150);
   }
 
+  /*
+  //We can for example only send signal if switched pressed as expected
+  if(switchPressedAsExpected) 
+  {
+    sendSignalToMaster();
+  }
+  */
+
+
+  sendSignalToMaster();
+
   Serial.print("Motor moved by: ");
   Serial.println(steps);
   Serial.print("Motor at Pos: ");
-  Serial.println(currentSteps);
+  Serial.println(currentPos);
 }

@@ -4,14 +4,22 @@
 #define servoPin1 9 
 #define servoPin2 10 
 #define servoBigPin 11
+#define COMM_RECEIVE_PIN 7
 
+
+//Values to check!
 int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
 
+
+
 int servo1lefttake = 130;
+
+
 int servo2lefttake = 180;
 int servo1righttake = 0;
 int servo2righttake = 50;
+
 
 int servo1leftskip = 130;
 int servo2leftskip = 50;
@@ -30,6 +38,9 @@ int needleSteps = 42;
 int delayBigServo = 1000;
 int delaySmallServo = 500;
 
+int delaySending = 500;
+
+
 Servo servo1;     
 Servo servo2;
 Servo servoBig;
@@ -37,6 +48,8 @@ Servo servoBig;
 void setup() {
   pinMode(servoPin1, OUTPUT);  
   pinMode(servoPin2, OUTPUT);  
+
+  pinMode(COMM_RECEIVE_PIN, INPUT);
 
   Serial.begin(9600);           
   Wire.begin();              
@@ -95,6 +108,7 @@ void moveStep(String input)
     int bit1 = nemaAngle >> 8;
     int bit2 = nemaAngle & 255;
 
+
     Serial.print("Sending to NEMA motor: ");
     Serial.println(neg);
     Serial.println((bit1 << 8) + bit2);
@@ -105,7 +119,17 @@ void moveStep(String input)
     Wire.write(bit2);
     Wire.endTransmission();
 
-  } else {
+
+    delay(delaySending);
+    while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
+      Serial.println("x");
+    }
+    // Signal received from slave, hence everythig okey and we can continue next row
+    Serial.println("Signal received from slave");
+
+  } 
+  else {
+
     Serial.println("Invalid command. Use 's1 x', 's2 x', or 'n x'.");
   }
 }
@@ -151,6 +175,7 @@ void moveRow(String input)
   else if(input.startsWith("fr")) {
     goFirstRight();
   }
+
   else if(input.startsWith("ar")) {
     moveStep("n "+String(firstNeedleDistanceLeft));
   }
@@ -163,7 +188,7 @@ void moveRow(String input)
     servo2.write(servo2lefttake);        
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used
+
   }
   else if(input.startsWith("ls ")) {
     int nNeedles = input.substring(4).toInt();
@@ -171,7 +196,6 @@ void moveRow(String input)
     servo2.write(servo2leftskip);    
     delay(delaySmallServo);
     moveStep("n "+ String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used    
 
   }
   else if(input.startsWith("rt ")) {
@@ -180,7 +204,6 @@ void moveRow(String input)
     servo2.write(servo2righttake);     
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used 
 
   }
   else if(input.startsWith("rs ")) {
@@ -189,7 +212,7 @@ void moveRow(String input)
     servo2.write(servo1rightskip);   
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used
+
 
   }
   else
