@@ -4,7 +4,7 @@
 #define servoPin1 9 
 #define servoPin2 10 
 #define servoBigPin 11
-#define COMM_RECEIVE_PIN 12
+#define COMM_RECEIVE_PIN 7
 
 
 //Values to check!
@@ -111,7 +111,7 @@ void moveStep(String input)
     Wire.endTransmission();
 
     while (digitalRead(COMM_RECEIVE_PIN) != HIGH) {
-      Serial.println('x');
+      Serial.println("x");
     }
     // Signal received from slave, hence everythig okey and we can continue next row
     Serial.println("Signal received from slave");

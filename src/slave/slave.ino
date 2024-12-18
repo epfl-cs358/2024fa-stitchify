@@ -3,10 +3,10 @@
 #define stepPin 2  
 #define dirPin  5  
 #define enablePin 8 
-#define COMM_SEND_PIN 9 
+#define COMM_SEND_PIN 11
 
-const int switchPinRight = 11;
-const int switchPinLeft = 10;
+const int switchPinRight = 12;
+const int switchPinLeft = 13;
 
 const int expectedPosLeft = 0;
 const int expectedPosRight = 0;
@@ -136,6 +136,7 @@ void moveMotor(int neg, int steps) {
   }
   */
 
+  
   sendSignalToMaster();
 
   Serial.print("Motor moved by: ");
