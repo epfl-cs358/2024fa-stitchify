@@ -31,29 +31,29 @@
 
 
 //Values to be valibrated
-int servo1_left_take = 130;
-int servo2_left_take = 180;
-int servo1_right_take = 0;
-int servo2_right_take = 50;
+int servo1_left_take = 130;   // Position for taking left needles with servo 1
+int servo2_left_take = 180;   // Position for taking left needles with servo 2
+int servo1_right_take = 0;    // Position for taking right needles with servo 1
+int servo2_right_take = 50;   // Position for taking right needles with servo 2
 
-int servo1_left_skip = 130;
-int servo2_left_skip = 50;
-int servo1_right_skip = 130;
-int servo2_right_skip = 50;
+int servo1_left_skip = 130;   // Position for skipping left needles with servo 1
+int servo2_left_skip = 50;    // Position for skipping left needles with servo 2
+int servo1_right_skip = 130;  // Position for skipping right needles with servo 1
+int servo2_right_skip = 50;   // Position for skipping right needles with servo 2
 
-int servo_big_left = 70;
-int servo_big_right = 1;
+int servo_big_left = 70;      // Position for big servo when moving to the left
+int servo_big_right = 1;      // Position for big servo when moving to the right
 
-int first_needle_distance_left = 270;
-int first_needle_distance_right = 250;
+int first_needle_distance_left = 270;  // Distance to the first needle on the left (measured from switch, after bump)
+int first_needle_distance_right = 250; // Distance to the first needle on the right (measured from switch,  after bump)
 
-int carriage_steps = 2500;
-int needle_steps = 42;
+int carriage_steps = 2500;   // Number of steps required to move the entire carriage
+int needle_steps = 42;       // Number of steps needed per needle 
 
-int delay_big_servo = 1000;
-int delay_small_servo = 500;
+int delay_big_servo = 1000;  // Delay for big servo movement (longer movement)
+int delay_small_servo = 500; // Delay for small servo movement (shorter movement)
+int delay_sending = 500;      // Delay for sending commands to NEMA motor (for communication pin switch)
 
-int delay_sending = 500;
 
 
 //Declaration of other components
