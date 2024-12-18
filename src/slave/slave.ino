@@ -46,12 +46,12 @@ void loop()
 
 void sendSignalToMaster() {
   digitalWrite(COMM_SEND_PIN, HIGH);
-  delay(100);  // Brief pulse
-  digitalWrite(COMM_SEND_PIN, LOW);
 }
 
 void receiveData(int byteCount) 
 {
+  digitalWrite(COMM_SEND_PIN, LOW);
+  
   int neg = 0, steps = 0;
   neg = Wire.read();
   steps = Wire.read();
@@ -136,7 +136,7 @@ void moveMotor(int neg, int steps) {
   }
   */
 
-  
+
   sendSignalToMaster();
 
   Serial.print("Motor moved by: ");

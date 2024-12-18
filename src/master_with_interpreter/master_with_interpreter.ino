@@ -32,6 +32,7 @@ int needleSteps = 42;
 
 int delayBigServo = 1000;
 int delaySmallServo = 500;
+int delaySending = 500;
 
 Servo servo1;     
 Servo servo2;
@@ -109,8 +110,9 @@ void moveStep(String input)
     Wire.write(bit1); 
     Wire.write(bit2);
     Wire.endTransmission();
-
-    while (digitalRead(COMM_RECEIVE_PIN) != HIGH) {
+    
+    delay(delaySending);
+    while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
       Serial.println("x");
     }
     // Signal received from slave, hence everythig okey and we can continue next row
