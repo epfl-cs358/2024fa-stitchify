@@ -12,7 +12,9 @@ int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
 
 
+
 int servo1lefttake = 130;
+
 
 int servo2lefttake = 180;
 int servo1righttake = 0;
@@ -35,6 +37,7 @@ int needleSteps = 42;
 
 int delayBigServo = 1000;
 int delaySmallServo = 500;
+
 int delaySending = 500;
 
 
@@ -160,14 +163,12 @@ void moveRow(String input)
     goFirstRight();
     moveStep("n "+String(carriageSteps));
     delay(5000); //TODO: not needed if security measures used
-
   }
   else if(input.startsWith("kl")) {
     goFirstLeft();
     moveStep("n -"+String(carriageSteps));
     delay(5000); //TODO: not needed if security measures used
   }
-
   else if(input.startsWith("fl")) {
     goFirstLeft();
   }
@@ -187,6 +188,7 @@ void moveRow(String input)
     servo2.write(servo2lefttake);        
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
+
   }
   else if(input.startsWith("ls ")) {
     int nNeedles = input.substring(4).toInt();
@@ -194,6 +196,7 @@ void moveRow(String input)
     servo2.write(servo2leftskip);    
     delay(delaySmallServo);
     moveStep("n "+ String(needleSteps * nNeedles));
+
   }
   else if(input.startsWith("rt ")) {
     int nNeedles = input.substring(4).toInt();
@@ -201,6 +204,7 @@ void moveRow(String input)
     servo2.write(servo2righttake);     
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
+
   }
   else if(input.startsWith("rs ")) {
     int nNeedles = input.substring(4).toInt();
@@ -208,6 +212,7 @@ void moveRow(String input)
     servo2.write(servo1rightskip);   
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
+
 
   }
   else
