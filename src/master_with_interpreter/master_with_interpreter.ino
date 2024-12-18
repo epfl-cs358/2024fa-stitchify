@@ -24,9 +24,9 @@ int servo2leftskip = 130;
 int servo1rightskip = 130;
 int servo2rightskip = 130;
 int servoleft = 70;
-int servoright = 7;
+int servoright = 1;
 
-int firstNeedleDistanceLeft = 280; 
+int firstNeedleDistanceLeft = 280; //250
 int firstNeedleDistanceRight = 300; // 285
 
 int carriageSteps = 2500;
