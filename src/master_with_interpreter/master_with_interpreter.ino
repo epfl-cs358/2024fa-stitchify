@@ -6,6 +6,8 @@
 #define servoBigPin 11
 #define COMM_RECEIVE_PIN 12
 
+
+//Values to check!
 int angle1 = 0, angle2 = 0, angle = 0;
 int nemaAngle = 0;   
 
