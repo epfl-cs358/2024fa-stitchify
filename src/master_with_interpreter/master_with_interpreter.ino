@@ -13,24 +13,21 @@ int nemaAngle = 0;
 
 
 
-int servo1lefttake = 130;
-
-
-int servo2lefttake = 180;
+int servo1lefttake = 100;
+int servo2lefttake = 130;
 int servo1righttake = 0;
-int servo2righttake = 50;
+int servo2righttake = 0;
 
 
 int servo1leftskip = 130;
-int servo2leftskip = 50;
+int servo2leftskip = 130;
 int servo1rightskip = 130;
-int servo2rightskip = 50;
-
+int servo2rightskip = 130;
 int servoleft = 70;
-int servoright = 1;
+int servoright = 7;
 
-int firstNeedleDistanceLeft = 270;
-int firstNeedleDistanceRight = 250;
+int firstNeedleDistanceLeft = 280; 
+int firstNeedleDistanceRight = 300; // 285
 
 int carriageSteps = 2500;
 int needleSteps = 42;

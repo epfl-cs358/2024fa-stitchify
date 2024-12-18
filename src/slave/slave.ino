@@ -79,9 +79,9 @@ void backUp(int neg)
     { 
       currentPos -= stepsPosNeg;
       digitalWrite(stepPin, HIGH);
-      delay(200);
+      delay(500);
       digitalWrite(stepPin, LOW);
-      delay(200);
+      delay(500);
     }
 }
 
@@ -123,9 +123,9 @@ void moveMotor(int neg, int steps) {
 
     currentPos += stepsPosNeg;
     digitalWrite(stepPin, HIGH);
-    delay(150);
+    delay(500);
     digitalWrite(stepPin, LOW);
-    delay(150);
+    delay(500);
   }
 
   /*
