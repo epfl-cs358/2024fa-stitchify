@@ -110,7 +110,7 @@ void moveStep(String input)
     Wire.write(bit1); 
     Wire.write(bit2);
     Wire.endTransmission();
-    
+
     delay(delaySending);
     while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
       Serial.println("x");
@@ -177,7 +177,6 @@ void moveRow(String input)
     servo2.write(servo2lefttake);        
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used
   }
   else if(input.startsWith("ls ")) {
     int nNeedles = input.substring(4).toInt();
@@ -185,8 +184,6 @@ void moveRow(String input)
     servo2.write(servo2leftskip);    
     delay(delaySmallServo);
     moveStep("n "+ String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used    
-
   }
   else if(input.startsWith("rt ")) {
     int nNeedles = input.substring(4).toInt();
@@ -194,8 +191,6 @@ void moveRow(String input)
     servo2.write(servo2righttake);     
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used 
-
   }
   else if(input.startsWith("rs ")) {
     int nNeedles = input.substring(4).toInt();
@@ -203,8 +198,6 @@ void moveRow(String input)
     servo2.write(servo1rightskip);   
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
-    delay(5000); //TODO: not needed if security measures used
-
   }
   else
   {
