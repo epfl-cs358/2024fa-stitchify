@@ -2,40 +2,40 @@
 #include <Servo.h>
 #include <SD.h>
 
-#define servoPin1 9 
-#define servoPin2 10 
-#define chipSelect 4 
+#define servo_pin_1 9 
+#define servo_pin_2 10 
+#define chip_select 4 
 
-int angle1 = 0;     
-int angle2 = 0;
-int nemaAngle = 0;  
+int angle_1 = 0;     
+int angle_2 = 0;
+int nema_angle = 0;  
 
-Servo servo1; 
-Servo servo2;
+Servo servo_1; 
+Servo servo_2;
 
-File commandFile;
+File command_file;
 
 void setup() {
-  pinMode(servoPin1, OUTPUT);
-  pinMode(servoPin2, OUTPUT);
+  pinMode(servo_pin_1, OUTPUT);
+  pinMode(servo_pin_2, OUTPUT);
 
   Serial.begin(9600);           
   Wire.begin();
 
-  servo1.attach(servoPin1); 
-  servo2.attach(servoPin2);
+  servo_1.attach(servo_pin_1); 
+  servo_2.attach(servo_pin_2);
 
-  servo1.write(0); 
-  servo2.write(0); 
+  servo_1.write(0); 
+  servo_2.write(0); 
 
 
-  if (!SD.begin(chipSelect)) {
+  if (!SD.begin(chip_select)) {
     Serial.println("SD card initialization failed!");
     return;
   }
 
-  commandFile = SD.open("commands.txt");
-  if (!commandFile) {
+  command_file = SD.open("commands.txt");
+  if (!command_file) {
     Serial.println("Failed to open commands.txt!");
     return;
   }
@@ -44,33 +44,33 @@ void setup() {
 
 void loop() {
   Serial.println("1");
-  if (commandFile.available()) {
-    String input = commandFile.readStringUntil('\n'); 
+  if (command_file.available()) {
+    String input = command_file.readStringUntil('\n'); 
     input.trim();
     Serial.println(input);
 
     if (input.startsWith("s1 ")) {
-      angle1 = input.substring(3).toInt();
-      if (angle1 > 180) angle1 = 180;
-      servo1.write(angle1);
+      angle_1 = input.substring(3).toInt();
+      if (angle_1 > 180) angle_1 = 180;
+      servo_1.write(angle_1);
       Serial.print("Servo1 moved to: ");
-      Serial.println(angle1);
+      Serial.println(angle_1);
 
     } else if (input.startsWith("s2 ")) {
-      nemaAngle = input.substring(2).toInt();
+      nema_angle = input.substring(2).toInt();
       int neg = 0;
-      if (nemaAngle < 0) 
+      if (nema_angle < 0) 
       {
-        nemaAngle = -nemaAngle;
+        nema_angle = -nema_angle;
         neg = 1;
       }
       Serial.print("Sending to NEMA motor: ");
       Serial.println(neg);
-      Serial.println(nemaAngle);
+      Serial.println(nema_angle);
 
       Wire.beginTransmission(8);
       Wire.write(neg); 
-      Wire.write(nemaAngle); 
+      Wire.write(nema_angle); 
       Wire.endTransmission();
       
     } else {
@@ -79,7 +79,7 @@ void loop() {
     delay(1000);
   } else {
     Serial.println("End of commands file reached.");
-    commandFile.close();
+    command_file.close();
     while (1);
   }
 }

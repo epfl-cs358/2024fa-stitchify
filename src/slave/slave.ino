@@ -1,56 +1,55 @@
 #include <Wire.h>
 
-#define stepPin 2  
-#define dirPin  5  
-#define enablePin 8 
-#define COMM_SEND_PIN 11
+#define step_pin 2  
+#define dir_pin  5  
+#define enable_pin 8 
+#define comm_send_pin 11
 
-const int switchPinRight = 12;
-const int switchPinLeft = 13;
+const int switch_pin_right = 12;
+const int switch_pin_left = 13;
 
-const int expectedPosLeft = 0;
-const int expectedPosRight = 0;
+const int expected_pos_left = 0;
+const int expected_pos_right = 0;
 
-int currentPos = 0, targetSteps = 0, stepsPosNeg = 0;
+int current_pos = 0, target_steps = 0, steps_pos_neg = 0;
 
 void setup() 
 {
-  pinMode(stepPin, OUTPUT);
-  pinMode(dirPin, OUTPUT);
-  pinMode(enablePin, OUTPUT);
+  pinMode(step_pin, OUTPUT);
+  pinMode(dir_pin, OUTPUT);
+  pinMode(enable_pin, OUTPUT);
 
-  pinMode(switchPinRight, INPUT_PULLUP);
-  pinMode(switchPinLeft, INPUT_PULLUP);
+  pinMode(switch_pin_right, INPUT_PULLUP);
+  pinMode(switch_pin_left, INPUT_PULLUP);
 
-  pinMode(COMM_SEND_PIN, OUTPUT);
-  digitalWrite(COMM_SEND_PIN, LOW);
+  pinMode(comm_send_pin, OUTPUT);
+  digitalWrite(comm_send_pin, LOW);
 
-
-  digitalWrite(enablePin, LOW);
+  digitalWrite(enable_pin, LOW);
 
   Wire.begin(8);
-  Wire.onReceive(receiveData);
+  Wire.onReceive(receive_data);
 
   Serial.begin(9600);
   Serial.println("Ready to receive step count.");
 
-  int switchStateRight = digitalRead(switchPinRight);
-  int switchStateLeft = digitalRead(switchPinLeft);
-  Serial.println(switchStateRight);
-  Serial.println(switchStateLeft);
+  int switch_state_right = digitalRead(switch_pin_right);
+  int switch_state_left = digitalRead(switch_pin_left);
+  Serial.println(switch_state_right);
+  Serial.println(switch_state_left);
 }
 
 void loop() 
 {
 }
 
-void sendSignalToMaster() {
-  digitalWrite(COMM_SEND_PIN, HIGH);
+void send_signal_to_master() {
+  digitalWrite(comm_send_pin, HIGH);
 }
 
-void receiveData(int byteCount) 
+void receive_data(int byte_count) 
 {
-  digitalWrite(COMM_SEND_PIN, LOW);
+  digitalWrite(comm_send_pin, LOW);
   
   int neg = 0, steps = 0;
   neg = Wire.read();
@@ -61,32 +60,33 @@ void receiveData(int byteCount)
   Serial.println(steps);
   Serial.println(neg);
 
-  targetSteps = steps;
-  moveMotor(neg, targetSteps);
+  target_steps = steps;
+  move_motor(neg, target_steps);
 }
 
-void backUp(int neg)
+void back_up(int neg)
 {
   if (neg == 0) 
   {
-    digitalWrite(dirPin, LOW); 
-    } 
-    else {
-      digitalWrite(dirPin, HIGH); 
-    }
+    digitalWrite(dir_pin, LOW); 
+  } 
+  else 
+  {
+    digitalWrite(dir_pin, HIGH); 
+  }
 
-    for(int j = 0; j < 45; j++)
-    { 
-      currentPos -= stepsPosNeg;
-      digitalWrite(stepPin, HIGH);
-      delay(200);
-      digitalWrite(stepPin, LOW);
-      delay(200);
-    }
+  for(int j = 0; j < 45; j++)
+  { 
+    current_pos -= steps_pos_neg;
+    digitalWrite(step_pin, HIGH);
+    delay(200);
+    digitalWrite(step_pin, LOW);
+    delay(200);
+  }
 }
 
-void moveMotor(int neg, int steps) {
-  stepsPosNeg = neg == 1 ? -1 : 1;
+void move_motor(int neg, int steps) {
+  steps_pos_neg = neg == 1 ? -1 : 1;
 
   if (steps == 0) 
   {
@@ -94,53 +94,44 @@ void moveMotor(int neg, int steps) {
   }
   else if (neg == 0) 
   {
-    digitalWrite(dirPin, HIGH); 
+    digitalWrite(dir_pin, HIGH); 
   } 
   else 
   {
-    digitalWrite(dirPin, LOW); 
+    digitalWrite(dir_pin, LOW); 
   }
 
-  bool switchPressedAsExpected = 1;
+  bool switch_pressed_as_expected = 1;
   for (int i = 0; i < steps; i++) {
 
-    int switchStateRight = digitalRead(switchPinRight);
-    int switchStateLeft = digitalRead(switchPinLeft);
-    if (switchStateRight == HIGH or switchStateLeft == HIGH) {
+    int switch_state_right = digitalRead(switch_pin_right);
+    int switch_state_left = digitalRead(switch_pin_left);
+    if (switch_state_right == HIGH || switch_state_left == HIGH) {
 
-      if(switchStateRight == HIGH && abs(currentPos - expectedPosRight)>2) 
+      if(switch_state_right == HIGH && abs(current_pos - expected_pos_right) > 2) 
       {
-        switchPressedAsExpected = 0;
+        switch_pressed_as_expected = 0;
       }
-      if(switchStateLeft == HIGH && abs(currentPos!=expectedPosLeft)>2) 
+      if(switch_state_left == HIGH && abs(current_pos != expected_pos_left) > 2) 
       {
-        switchPressedAsExpected = 0;
+        switch_pressed_as_expected = 0;
       }
 
-      backUp(neg);
+      back_up(neg);
       break;
     }
 
-    currentPos += stepsPosNeg;
-    digitalWrite(stepPin, HIGH);
+    current_pos += steps_pos_neg;
+    digitalWrite(step_pin, HIGH);
     delay(150);
-    digitalWrite(stepPin, LOW);
+    digitalWrite(step_pin, LOW);
     delay(150);
   }
 
-  /*
-  //We can for example only send signal if switched pressed as expected
-  if(switchPressedAsExpected) 
-  {
-    sendSignalToMaster();
-  }
-  */
-
-
-  sendSignalToMaster();
+  send_signal_to_master();
 
   Serial.print("Motor moved by: ");
   Serial.println(steps);
   Serial.print("Motor at Pos: ");
-  Serial.println(currentPos);
+  Serial.println(current_pos);
 }

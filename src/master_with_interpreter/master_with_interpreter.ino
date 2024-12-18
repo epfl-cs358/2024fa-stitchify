@@ -1,62 +1,78 @@
+/*
+ * Knitting Machine Control Code
+ * 
+ * Supported Commands:
+ * - l        : Move small servos to the left
+ * - r        : Move small servos to the right
+ * - s x      : Move big servo to position x
+ * - s1 x     : Move small servo 1 to position x
+ * - s2 x     : Move small servo 2 to position x
+ * - n x      : Move NEMA motors by x steps
+ * - kr       : Knit a full row to the right
+ * - kl       : Knit a full row to the left
+ * - fl       : Go to the first needle on the left from the switch point
+ * - fr       : Go to the first needle on the right from the switch point
+ * - al       : Move after the first needle left (continue from the last step to the end)
+ * - ar       : Move after the first needle right (continue from the last step to the end)
+ * - lt x     : Left take x needles (raise needles up)
+ * - rt x     : Right take x needles (raise needles up)
+ * - ls x     : Left skip x needles (lower needles down)
+ * - rs x     : Right skip x needles (lower needles down)
+ * - knit x   : Knit x double rows (right and left equals one row)
+ *
+ */
 #include <Wire.h>
 #include <Servo.h>
 
-#define servoPin1 9 
-#define servoPin2 10 
-#define servoBigPin 11
+#define servo1_pin 9 
+#define servo2_pin 10 
+#define servo_big_pin 11
 #define COMM_RECEIVE_PIN 7
 
 
-//Values to check!
-int angle1 = 0, angle2 = 0, angle = 0;
-int nemaAngle = 0;   
+//Values to be valibrated
+int servo1_left_take = 130;
+int servo2_left_take = 180;
+int servo1_right_take = 0;
+int servo2_right_take = 50;
+
+int servo1_left_skip = 130;
+int servo2_left_skip = 50;
+int servo1_right_skip = 130;
+int servo2_right_skip = 50;
+
+int servo_big_left = 70;
+int servo_big_right = 1;
+
+int first_needle_distance_left = 270;
+int first_needle_distance_right = 250;
+
+int carriage_steps = 2500;
+int needle_steps = 42;
+
+int delay_big_servo = 1000;
+int delay_small_servo = 500;
+
+int delay_sending = 500;
 
 
-
-int servo1lefttake = 130;
-
-
-int servo2lefttake = 180;
-int servo1righttake = 0;
-int servo2righttake = 50;
-
-
-int servo1leftskip = 130;
-int servo2leftskip = 50;
-int servo1rightskip = 130;
-int servo2rightskip = 50;
-
-int servoleft = 70;
-int servoright = 1;
-
-int firstNeedleDistanceLeft = 270;
-int firstNeedleDistanceRight = 250;
-
-int carriageSteps = 2500;
-int needleSteps = 42;
-
-int delayBigServo = 1000;
-int delaySmallServo = 500;
-
-int delaySending = 500;
-
-
+//Declaration of other components
 Servo servo1;     
 Servo servo2;
 Servo servoBig;
 
 void setup() {
-  pinMode(servoPin1, OUTPUT);  
-  pinMode(servoPin2, OUTPUT);  
+  pinMode(servo1_pin, OUTPUT);  
+  pinMode(servo2_pin, OUTPUT);  
 
   pinMode(COMM_RECEIVE_PIN, INPUT);
 
   Serial.begin(9600);           
   Wire.begin();              
 
-  servo1.attach(servoPin1); 
-  servo2.attach(servoPin2); 
-  servoBig.attach(servoBigPin,900,2200);
+  servo1.attach(servo1_pin); 
+  servo2.attach(servo2_pin); 
+  servoBig.attach(servo_big_pin,900,2200);
 
   servo1.write(0);
   servo2.write(0); 
@@ -68,22 +84,22 @@ void setup() {
 void moveStep(String input)
 {
   if (input.startsWith("l")) {
-    servo1.write(servo1lefttake);     
-    servo2.write(servo2lefttake);        
+    servo1.write(servo1_left_take);     
+    servo2.write(servo2_left_take);        
     Serial.print("Servos moved left");
 
   }else if (input.startsWith("r")) {
-    servo1.write(servo1righttake);     
-    servo2.write(servo2righttake);        
+    servo1.write(servo1_right_take);     
+    servo2.write(servo2_right_take);        
     Serial.print("Servos moved right");
 
   }else if (input.startsWith("s ")) {
-    angle = input.substring(2).toInt();
+    int angle = input.substring(2).toInt();
     servoBig.write(angle);     
     Serial.print("Big servo moved");
 
   }else if (input.startsWith("s1 ")) {
-    angle = input.substring(3).toInt();
+    int angle = input.substring(3).toInt();
     if (angle > 180) angle = 180;   
     servo1.write(angle);         
     Serial.print("Servo1 moved to: ");
@@ -91,36 +107,36 @@ void moveStep(String input)
 
   } else if (input.startsWith("s2 ")) {
 
-    angle = input.substring(3).toInt();
+    int angle = input.substring(3).toInt();
     if (angle > 180) angle = 180;
     servo2.write(angle); 
     Serial.print("Servo2 moved to: ");
     Serial.println(angle);
 
   } else if (input.startsWith("n ")) {
-    nemaAngle = input.substring(2).toInt();
+    int nema_angle = input.substring(2).toInt();
     int neg = 0;
-    if (nemaAngle < 0) 
+    if (nema_angle < 0) 
     {
-      nemaAngle = -nemaAngle;
+      nema_angle = -nema_angle;
       neg = 1;
     }
-    int bit1 = nemaAngle >> 8;
-    int bit2 = nemaAngle & 255;
+    int bit_high = nema_angle >> 8;
+    int bit_low = nema_angle & 255;
 
 
     Serial.print("Sending to NEMA motor: ");
     Serial.println(neg);
-    Serial.println((bit1 << 8) + bit2);
+    Serial.println((bit_high << 8) + bit_low);
 
     Wire.beginTransmission(8);
     Wire.write(neg); 
-    Wire.write(bit1); 
-    Wire.write(bit2);
+    Wire.write(bit_high); 
+    Wire.write(bit_low);
     Wire.endTransmission();
 
 
-    delay(delaySending);
+    delay(delay_sending);
     while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
       Serial.println("x");
     }
@@ -136,21 +152,21 @@ void moveStep(String input)
 void goFirstRight()
 {
   moveStep("r");
-  moveStep("s "+String(servoleft));
-  delay(delayBigServo);
-  moveStep("n "+String(firstNeedleDistanceRight));
-  moveStep("s "+String(servoright));
-  delay(delayBigServo);
+  moveStep("s "+String(servo_big_left));
+  delay(delay_big_servo);
+  moveStep("n "+String(first_needle_distance_right));
+  moveStep("s "+String(servo_big_right));
+  delay(delay_big_servo);
 }
 
 void goFirstLeft()
 {
   moveStep("l");
-  moveStep("s "+String(servoright));
-  delay(delayBigServo);
-  moveStep("n -"+String(firstNeedleDistanceLeft));
-  moveStep("s "+String(servoleft));
-  delay(delayBigServo);
+  moveStep("s "+String(servo_big_right));
+  delay(delay_big_servo);
+  moveStep("n -"+String(first_needle_distance_left));
+  moveStep("s "+String(servo_big_left));
+  delay(delay_big_servo);
 }
 
 void moveRow(String input)
@@ -158,11 +174,11 @@ void moveRow(String input)
   Serial.println(input);
   if (input.startsWith("kr")) {
     goFirstRight();
-    moveStep("n "+String(carriageSteps));
+    moveStep("n "+String(carriage_steps));
   }
   else if(input.startsWith("kl")) {
     goFirstLeft();
-    moveStep("n -"+String(carriageSteps));
+    moveStep("n -"+String(carriage_steps));
   }
   else if(input.startsWith("fl")) {
     goFirstLeft();
@@ -172,41 +188,41 @@ void moveRow(String input)
   }
 
   else if(input.startsWith("ar")) {
-    moveStep("n "+String(firstNeedleDistanceLeft));
+    moveStep("n "+String(first_needle_distance_left));
   }
   else if(input.startsWith("al")) {
-    moveStep("n "+String(firstNeedleDistanceRight));
+    moveStep("n "+String(first_needle_distance_right));
   }
   else if(input.startsWith("lt ")) {
-    int nNeedles = input.substring(4).toInt();
-    servo1.write(servo1lefttake);     
-    servo2.write(servo2lefttake);        
-    delay(delaySmallServo);
-    moveStep("n "+String(needleSteps * nNeedles));
+    int n_needles = input.substring(4).toInt();
+    servo1.write(servo1_left_take);     
+    servo2.write(servo2_left_take);        
+    delay(delay_small_servo);
+    moveStep("n "+String(needle_steps * n_needles));
 
   }
   else if(input.startsWith("ls ")) {
-    int nNeedles = input.substring(4).toInt();
-    servo1.write(servo1leftskip);     
-    servo2.write(servo2leftskip);    
-    delay(delaySmallServo);
-    moveStep("n "+ String(needleSteps * nNeedles));
+    int n_needles = input.substring(4).toInt();
+    servo1.write(servo1_left_skip);     
+    servo2.write(servo2_left_skip);    
+    delay(delay_small_servo);
+    moveStep("n "+ String(needle_steps * n_needles));
 
   }
   else if(input.startsWith("rt ")) {
-    int nNeedles = input.substring(4).toInt();
-    servo1.write(servo1righttake);     
-    servo2.write(servo2righttake);     
-    delay(delaySmallServo);
-    moveStep("n "+String(needleSteps * nNeedles));
+    int n_needles = input.substring(4).toInt();
+    servo1.write(servo1_right_take);     
+    servo2.write(servo2_right_take);     
+    delay(delay_small_servo);
+    moveStep("n "+String(needle_steps * n_needles));
 
   }
   else if(input.startsWith("rs ")) {
-    int nNeedles = input.substring(4).toInt();
-    servo1.write(servo1rightskip);     
-    servo2.write(servo1rightskip);   
-    delay(delaySmallServo);
-    moveStep("n "+String(needleSteps * nNeedles));
+    int n_needles = input.substring(4).toInt();
+    servo1.write(servo1_right_skip);     
+    servo2.write(servo2_right_skip);   
+    delay(delay_small_servo);
+    moveStep("n "+String(needle_steps * n_needles));
 
 
   }
@@ -221,8 +237,8 @@ void loop() {
     String input = Serial.readStringUntil('\n');
     input.trim(); 
     if (input.startsWith("knit ")) {
-      int numberRows = input.substring(5).toInt();
-      for(int i=0; i<numberRows; i++)
+      int number_rows = input.substring(5).toInt();
+      for(int i=0; i<number_rows; i++)
       {
         moveRow("kl");
         moveRow("kr");
