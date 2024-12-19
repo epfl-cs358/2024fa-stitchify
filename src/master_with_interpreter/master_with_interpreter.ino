@@ -13,25 +13,25 @@ int nemaAngle = 0;
 
 
 
-int servo1lefttake = 100;
-int servo2lefttake = 130;
+int servo1lefttake = 110;
+int servo2lefttake = 130; //145 
 int servo1righttake = 0;
-int servo2righttake = 0;
+int servo2righttake = 0; //15
 
-int servo1leftskip = 100;
+int servo1leftskip = 110;
 int servo2leftskip = 0;
-int servo1rightskip = 100;
+int servo1rightskip = 110;
 int servo2rightskip = 0;
 int servoleft = 70;
 int servoright = 1;
 
-int firstNeedleDistanceLeft = 280; //250
-int firstNeedleDistanceRight = 300; // 285
+int firstNeedleDistanceLeft = 250; //250
+int firstNeedleDistanceRight = 250; // 285
 
 int carriageSteps = 2500;
 int needleSteps = 40;
 
-int delayBigServo = 1000;
+int delayBigServo = 2000;
 int delaySmallServo = 500;
 
 int delaySending = 500;
@@ -133,23 +133,35 @@ void moveStep(String input)
 void goFirstRight()
 {
   moveStep("r");
+  delay(delaySmallServo);
   moveStep("s "+String(servoleft));
-  delay(delayBigServo);
   moveStep("n "+String(firstNeedleDistanceRight));
-  delay(5000); //not needed if security measures used
-  moveStep("s "+String(servoright));
   delay(delayBigServo);
+  moveStep("s "+String(servoright));
+  Serial.println("Is everything ok ?");
+  String input = Serial.readStringUntil('\n');
+  input.trim(); 
+  while(!input.startsWith("yes")){
+    input = Serial.readStringUntil('\n');
+    input.trim(); 
+  }
 }
 
 void goFirstLeft()
 {
   moveStep("l");
+  delay(delaySmallServo);
   moveStep("s "+String(servoright));
-  delay(delayBigServo);
   moveStep("n -"+String(firstNeedleDistanceLeft));
-  delay(5000); //not needed if security measures used
-  moveStep("s "+String(servoleft));
   delay(delayBigServo);
+  moveStep("s "+String(servoleft));
+  Serial.println("Is everything ok ?");
+  String input = Serial.readStringUntil('\n');
+  input.trim(); 
+  while(!input.startsWith("yes")){
+    input = Serial.readStringUntil('\n');
+    input.trim(); 
+  }
 }
 
 void moveRow(String input)

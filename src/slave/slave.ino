@@ -123,9 +123,9 @@ void moveMotor(int neg, int steps) {
 
     currentPos += stepsPosNeg;
     digitalWrite(stepPin, HIGH);
-    delay(500);
+    delay(700);
     digitalWrite(stepPin, LOW);
-    delay(500);
+    delay(700);
   }
 
   /*
