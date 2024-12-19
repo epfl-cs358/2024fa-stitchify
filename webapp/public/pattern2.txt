@@ -1,0 +1,160 @@
+fl
+ls 7
+lt 9
+ls 9
+n -2500
+fr
+rs 7
+rt 9
+rs 9
+n 2500
+fl
+ls 6
+lt 11
+ls 8
+n -2500
+fr
+rs 6
+rt 11
+rs 8
+n 2500
+fl
+ls 5
+lt 13
+ls 7
+n -2500
+fr
+rs 5
+rt 13
+rs 7
+n 2500
+fl
+ls 4
+lt 15
+ls 6
+n -2500
+fr
+rs 4
+rt 15
+rs 6
+n 2500
+fl
+ls 3
+lt 17
+ls 5
+n -2500
+fr
+rs 3
+rt 17
+rs 5
+n 2500
+fl
+ls 4
+lt 15
+ls 6
+n -2500
+fr
+rs 4
+rt 15
+rs 6
+n 2500
+fl
+ls 5
+lt 13
+ls 7
+n -2500
+fr
+rs 5
+rt 13
+rs 7
+n 2500
+fl
+ls 6
+lt 11
+ls 8
+n -2500
+fr
+rs 6
+rt 11
+rs 8
+n 2500
+fl
+ls 7
+lt 9
+ls 9
+n -2500
+fr
+rs 7
+rt 9
+rs 9
+n 2500
+fl
+ls 6
+lt 11
+ls 8
+n -2500
+fr
+rs 6
+rt 11
+rs 8
+n 2500
+fl
+ls 5
+lt 13
+ls 7
+n -2500
+fr
+rs 5
+rt 13
+rs 7
+n 2500
+fl
+ls 4
+lt 15
+ls 6
+n -2500
+fr
+rs 4
+rt 15
+rs 6
+n 2500
+fl
+ls 3
+lt 17
+ls 5
+n -2500
+fr
+rs 3
+rt 17
+rs 5
+n 2500
+fl
+ls 4
+lt 15
+ls 6
+n -2500
+fr
+rs 4
+rt 15
+rs 6
+n 2500
+fl
+ls 5
+lt 13
+ls 7
+n -2500
+fr
+rs 5
+rt 13
+rs 7
+n 2500
+fl
+ls 6
+lt 11
+ls 8
+n -2500
+fr
+rs 6
+rt 11
+rs 8
+n 2500

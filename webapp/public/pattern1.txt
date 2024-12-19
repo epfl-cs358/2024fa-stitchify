@@ -1,0 +1,132 @@
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 9
+rs 2
+rt 11
+n 2500
+fl
+lt 8
+ls 4
+lt 10
+n -2500
+fr
+rt 9
+rs 2
+rt 11
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 9
+ls 2
+lt 11
+n -2500
+fr
+rt 8
+rs 4
+rt 10
+n 2500
+fl
+lt 9
+ls 2
+lt 11
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 9
+rs 2
+rt 11
+n 2500
+fl
+lt 8
+ls 4
+lt 10
+n -2500
+fr
+rt 9
+rs 2
+rt 11
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 9
+ls 2
+lt 11
+n -2500
+fr
+rt 8
+rs 4
+rt 10
+n 2500
+fl
+lt 9
+ls 2
+lt 11
+n -2500
+fr
+rt 22
+n 2500
+fl
+lt 22
+n -2500
+fr
+rt 22
+n 2500
