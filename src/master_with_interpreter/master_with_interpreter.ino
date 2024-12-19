@@ -27,6 +27,7 @@
 #define servo1_pin 9 
 #define servo2_pin 10 
 #define servo_big_pin 11
+#define CONF_RECEIVE_PIN 8
 #define COMM_RECEIVE_PIN 7
 
 
@@ -180,6 +181,14 @@ void moveRow(String input)
     goFirstLeft();
     moveStep("n -"+String(carriage_steps));
   }
+  else if (input.startsWith("krp")) {
+    goFirstRight();
+    moveStep("n "+String(carriage_steps));
+  }
+  else if(input.startsWith("klp")) {
+    goFirstLeft();
+    moveStep("n -"+String(carriage_steps));
+  }
   else if(input.startsWith("fl")) {
     goFirstLeft();
   }
@@ -223,8 +232,6 @@ void moveRow(String input)
     servo2.write(servo2_right_skip);   
     delay(delay_small_servo);
     moveStep("n "+String(needle_steps * n_needles));
-
-
   }
   else
   {
@@ -232,21 +239,39 @@ void moveRow(String input)
   }
 }
 
-void loop() {
-  if (Serial.available() > 0) {
-    String input = Serial.readStringUntil('\n');
-    input.trim(); 
-    if (input.startsWith("knit ")) {
-      int number_rows = input.substring(5).toInt();
-      for(int i=0; i<number_rows; i++)
-      {
-        moveRow("kl");
-        moveRow("kr");
-      }
-    }
-    else
+bool waitForRowConfirmation() {
+  while(CONF_RECEIVE_PIN == LOW) {}
+}
+
+void knit(string input)
+{
+  if (input.startsWith("knit ")) {
+    int number_rows = input.substring(5).toInt();
+    for(int i=0; i<number_rows; i++)
     {
-      moveRow(input);
+      if(i%2==0) moveRow("kl");
+      if(i%2==1) moveRow("kr");
+      waitForRowConfirmation();
     }
   }
+  if (input.startsWith("knitp ")) {
+    int number_rows = input.substring(6).toInt();
+    for(int i=0; i<number_rows; i++)
+    {
+      if(i%2==0) moveRow("klp");
+      if(i%2==1) moveRow("krp");
+      waitForRowConfirmation();
+    }
+  }
+  else
+  {
+    moveRow(input);
+  }
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+  String input = Serial.readStringUntil('\n');
+  input.trim(); 
+  knit(input);
 }
