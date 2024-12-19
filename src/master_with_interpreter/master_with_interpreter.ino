@@ -18,11 +18,10 @@ int servo2lefttake = 130;
 int servo1righttake = 0;
 int servo2righttake = 0;
 
-
-int servo1leftskip = 130;
-int servo2leftskip = 130;
-int servo1rightskip = 130;
-int servo2rightskip = 130;
+int servo1leftskip = 100;
+int servo2leftskip = 0;
+int servo1rightskip = 100;
+int servo2rightskip = 0;
 int servoleft = 70;
 int servoright = 1;
 
@@ -30,7 +29,7 @@ int firstNeedleDistanceLeft = 280; //250
 int firstNeedleDistanceRight = 300; // 285
 
 int carriageSteps = 2500;
-int needleSteps = 42;
+int needleSteps = 40;
 
 int delayBigServo = 1000;
 int delaySmallServo = 500;
@@ -180,23 +179,23 @@ void moveRow(String input)
     moveStep("n "+String(firstNeedleDistanceRight));
   }
   else if(input.startsWith("lt ")) {
-    int nNeedles = input.substring(4).toInt();
+    int nNeedles = input.substring(3).toInt();
     servo1.write(servo1lefttake);     
     servo2.write(servo2lefttake);        
     delay(delaySmallServo);
-    moveStep("n "+String(needleSteps * nNeedles));
+    moveStep("n "+String(-needleSteps * nNeedles));
 
   }
   else if(input.startsWith("ls ")) {
-    int nNeedles = input.substring(4).toInt();
+    int nNeedles = input.substring(3).toInt();
     servo1.write(servo1leftskip);     
     servo2.write(servo2leftskip);    
     delay(delaySmallServo);
-    moveStep("n "+ String(needleSteps * nNeedles));
+    moveStep("n "+ String(-needleSteps * nNeedles));
 
   }
   else if(input.startsWith("rt ")) {
-    int nNeedles = input.substring(4).toInt();
+    int nNeedles = input.substring(3).toInt();
     servo1.write(servo1righttake);     
     servo2.write(servo2righttake);     
     delay(delaySmallServo);
@@ -204,9 +203,9 @@ void moveRow(String input)
 
   }
   else if(input.startsWith("rs ")) {
-    int nNeedles = input.substring(4).toInt();
+    int nNeedles = input.substring(3).toInt();
     servo1.write(servo1rightskip);     
-    servo2.write(servo1rightskip);   
+    servo2.write(servo2rightskip);   
     delay(delaySmallServo);
     moveStep("n "+String(needleSteps * nNeedles));
 
