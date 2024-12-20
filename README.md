@@ -1,6 +1,3 @@
-<img width="964" alt="Screenshot 2024-12-20 at 10 10 01" src="https://github.com/user-attachments/assets/50094a49-0b0c-4ccf-a3eb-bc7bdbddc9f7" /># Stitchify
-
-
 <!-- ABOUT THE PROJECT -->
 
 ## Authors
@@ -167,11 +164,11 @@ The code implementation included the master-slave different data sharing channel
 
 ### Web Application
 - The web application is built using **React** and includes several pages:
-  - **Home**<img width="989" alt="Screenshot 2024-12-20 at 10 12 34" src="https://github.com/user-attachments/assets/f98fc7d6-c8c0-48ae-8aa1-89e73558ca09" />
-  - **Project Overview**<img width="971" alt="Screenshot 2024-12-20 at 10 16 41" src="https://github.com/user-attachments/assets/62eb2c9d-9873-4859-be34-c35cea9ae388" />
-  - **Download Pattern**<img width="964" alt="Screenshot 2024-12-20 at 10 10 01" src="https://github.com/user-attachments/assets/285e6b2b-cef1-433c-9519-202bbea0db6b" />
-  - **Create Pattern**<img width="1001" alt="Screenshot 2024-12-20 at 10 07 44" src="https://github.com/user-attachments/assets/62037330-264f-4165-b16a-cd746a30fdf9" />
-  - **Contact**<img width="996" alt="Screenshot 2024-12-20 at 10 08 14" src="https://github.com/user-attachments/assets/2e8d399f-57ce-430b-a658-7bbc4f56c193" />
+  - **Home**<img width="500" alt="Screenshot 2024-12-20 at 10 12 34" src="https://github.com/user-attachments/assets/f98fc7d6-c8c0-48ae-8aa1-89e73558ca09" />
+  - **Project Overview**<img width="500" alt="Screenshot 2024-12-20 at 10 16 41" src="https://github.com/user-attachments/assets/62eb2c9d-9873-4859-be34-c35cea9ae388" />
+  - **Download Pattern**<img width="500" alt="Screenshot 2024-12-20 at 10 10 01" src="https://github.com/user-attachments/assets/285e6b2b-cef1-433c-9519-202bbea0db6b" />
+  - **Create Pattern**<img width="500" alt="Screenshot 2024-12-20 at 10 07 44" src="https://github.com/user-attachments/assets/62037330-264f-4165-b16a-cd746a30fdf9" />
+  - **Contact**<img width="500" alt="Screenshot 2024-12-20 at 10 08 14" src="https://github.com/user-attachments/assets/2e8d399f-57ce-430b-a658-7bbc4f56c193" />
 
 
 - The React frontend communicates with the Wemos device to upload/download patterns and interact with the knitting machine.
