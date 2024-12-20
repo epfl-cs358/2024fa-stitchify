@@ -36,5 +36,7 @@ keystore.properties
 upload-keystore.jks
 /scraping/firebase_credentials.json
 
+/webapp/node_modules
+
 # MacOS
 **/.DS_Store

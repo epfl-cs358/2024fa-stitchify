@@ -4,6 +4,7 @@
 
 Wiktoria Rozkosz, Bogdan Cîrje, Imane Raihane, Lorie Xu, Yasmine Hidri, Victor Zablocki
 
+
 ## About The Project
 Fueled by curiosity, we worked to create a knitting machine from start to finish. The Knitting Robot is an Arduino-based automation system designed to knit simple fabric patterns such as scarves or scalable fabrics. The project aims to create a functional prototype capable of knitting patterns autonomously.
 
@@ -11,6 +12,7 @@ We based our work on the open source project OpenKnit, and spent a lot of time a
 
 This is our project prototype in motion:
 https://github.com/user-attachments/assets/023492ee-7dcc-4365-b6ac-0f5af49786ec
+
 
 ## Key Features
 * **Web Interface**: A web app allows users to upload knitting patterns and customize their projects (e.g., scarves, beanies, or pullovers).
@@ -151,8 +153,10 @@ The code implementation included the master-slave different data sharing channel
 - Listens for serial commands, handles multiple commands separated by semicolons, and processes them in sequence.
 - Communicates with NEMA motors via I2C using the Wire library additional channel for acknowledgments from the slave.
 
+
 ### Synchronization & Delays
 - Includes delays to synchronize servo and motor movements, ensuring proper sequencing of actions.
+
 
 ### Multi-command Support
 - Supports processing multiple commands in a single input, separated by semicolons, for efficient execution.
@@ -168,6 +172,7 @@ The code implementation included the master-slave different data sharing channel
 ### Web Application
 - The web application is built using **React** and includes several pages:
   - **Home**
+
     <img width="500" alt="Screenshot 2024-12-20 at 10 12 34" src="https://github.com/user-attachments/assets/f98fc7d6-c8c0-48ae-8aa1-89e73558ca09" />
   - **Project Overview**
     <img width="500" alt="Screenshot 2024-12-20 at 10 16 41" src="https://github.com/user-attachments/assets/62eb2c9d-9873-4859-be34-c35cea9ae388" />
