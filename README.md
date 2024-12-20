@@ -88,8 +88,8 @@ The knitting robot operates by controlling stepper motors and actuators to manip
 
 ---
 
-##Estimated Cost
-Materials: The estimated cost of the project is around $500, which includes motors, stepper controllers, structural components, and electronics.
+## Estimated Cost
+The estimated cost of the project is around $500, which includes motors, stepper controllers, structural components, and electronics.
 ---
 ## Fusion Designs
 Below is the very first overall design on Fusion that was created for this project :
