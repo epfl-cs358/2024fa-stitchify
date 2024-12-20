@@ -12,13 +12,13 @@ Fueled by curiosity, we worked to create a knitting machine from start to finish
 
 We based our work on the open source project OpenKnit, and spent a lot of time analysing and researching about how to go about in creating our machine. We obviously didn't have 5-6 years like OpenKnit did, so we had to simplify OpenKnit's design by a lot in order to fit the time frame of 10 weeks.
 
-##Key Features
+## Key Features
 * **Web Interface**: A web app allows users to upload knitting patterns and customize their projects (e.g., scarves, beanies, or pullovers).
 * **Real-Time Feedback**: An LCD screen on the knitting robot shows the progress and alerts users to any errors during operation.
 * **Modular Design**: The system is designed to be modular, allowing future expansions and adaptations for more complex knitting patterns.
 * **Educational Potential**: This project serves as a tool for teaching robotics, automation, and programming concepts.
 
-##How It Works
+## How It Works
 The knitting robot operates by controlling stepper motors and actuators to manipulate needles and yarn. The key steps are:
 * Pattern Upload: The user uploads a knitting pattern through the web interface. This pattern is typically a custom text-based file that describes the knitting design.
 * Conversion to Instructions: The uploaded pattern is converted into instructions that control the robot's movements (full list below).
@@ -273,11 +273,11 @@ While the current prototype of the knitting machine is functional, there are sev
 
 - **Improved Web Interface**: The web application could be enhanced to make pattern creation more intuitive, offer real-time feedback during the knitting process, and improve communication with the machine. Features could include drag-and-drop pattern design, live status updates, and automatic pattern generation.
 
-##Real-World Applications
+## Real-World Applications
 The knitting robot could be used in textile prototyping, allowing designers to test new patterns and fabric types quickly. It could also be useful for small-scale textile production in custom-made fashion.
 
 
-##Conclusion
+## Conclusion
 
 The Knitting Robot is a unique blend of robotics, software, and knitting technology. By automating the knitting process, this project aims to make knitting more accessible, efficient, and customizable.
 
