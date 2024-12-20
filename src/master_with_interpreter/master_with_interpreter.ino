@@ -2,58 +2,65 @@
  * Knitting Machine Control Code
  * 
  * Supported Commands:
- * - l        : Move small servos to the left
- * - r        : Move small servos to the right
- * - s x      : Move big servo to position x
- * - s1 x     : Move small servo 1 to position x
- * - s2 x     : Move small servo 2 to position x
- * - n x      : Move NEMA motors by x steps
- * - kr       : Knit a full row to the right
- * - kl       : Knit a full row to the left
- * - fl       : Go to the first needle on the left from the switch point
- * - fr       : Go to the first needle on the right from the switch point
- * - al       : Move after the first needle left (continue from the last step to the end)
- * - ar       : Move after the first needle right (continue from the last step to the end)
- * - lt x     : Left take x needles (raise needles up)
- * - rt x     : Right take x needles (raise needles up)
- * - ls x     : Left skip x needles (lower needles down)
- * - rs x     : Right skip x needles (lower needles down)
- * - knit x   : Knit x double rows (right and left equals one row)
- * - knits x  : Knit x double rows with confirmation after each row
- * - knitp x  : Knit x double rows of pattern with confirmation after each row
+ * - l         : Move small servos to the left.
+ * - r         : Move small servos to the right.
+ * - s x       : Move the big servo to position x (0–180).
+ * - s1 x      : Move small servo 1 to position x (0–180).
+ * - s2 x      : Move small servo 2 to position x (0–180).
+ * - n x       : Move NEMA motors by x steps (positive for forward, negative for reverse).
+ * - krb       : Knit a full row to the right (basic).
+ * - klb       : Knit a full row to the left (basic).
+ * - krs       : Knit a full row to the right (switch, wait for confirmation).
+ * - kls       : Knit a full row to the left (switch, wait for confirmation).
+ * - krp       : Knit a full row to the right (pattern, wait for confirmation).
+ * - klp       : Knit a full row to the left (pattern, wait for confirmation).
+ * - fl        : Move to the first needle on the left from the switch point.
+ * - fr        : Move to the first needle on the right from the switch point.
+ * - al        : Move after the first needle left (continue from the last step to the end).
+ * - ar        : Move after the first needle right (continue from the last step to the end).
+ * - lt x      : Take x needles to the left (raise needles up).
+ * - rt x      : Take x needles to the right (raise needles up).
+ * - ls x      : Skip x needles to the left (lower needles down).
+ * - rs x      : Skip x needles to the right (lower needles down).
+ * - knit x    : Knit x rows (right and left together count as one row).
+ * - knits x   : Knit x rows (step, wait for confirmation after each row).
+ * - knitp x   : Knit x rows (pause, wait for confirmation after each row).
+ *
  */
+
 #include <Wire.h>
 #include <Servo.h>
 
 #define servo1_pin 9 
 #define servo2_pin 10 
 #define servo_big_pin 11
-#define CONF_RECEIVE_PIN 8
 #define COMM_RECEIVE_PIN 7
 
-#define MAX_BUFFER_SIZE 100
+#define MAX_BUFFER_SIZE 50
 #define MAX_COMMAND_LENGTH 10
 
+const int CONF_RECEIVE_PIN = 8; //Additional switch pin
+//LiquidCrystal lcd(13, 12, 5, 4, 3, 2);
 
 //Values to be valibrated
-const int servo1_left_take = 130;   // Position for taking left needles with servo 1
-const int servo2_left_take = 180;   // Position for taking left needles with servo 2
-const int servo1_right_take = 0;    // Position for taking right needles with servo 1
-const int servo2_right_take = 50;   // Position for taking right needles with servo 2
+const int servo1_left_take = 165;   // Position for taking left needles with servo 1
+const int servo2_left_take = 140;   // Position for taking left needles with servo 2
+const int servo1_right_take = 60;    // Position for taking right needles with servo 1
+const int servo2_right_take = 10;   // Position for taking right needles with servo 2
 
-const int servo1_left_skip = 130;   // Position for skipping left needles with servo 1
-const int servo2_left_skip = 50;    // Position for skipping left needles with servo 2
-const int servo1_right_skip = 130;  // Position for skipping right needles with servo 1
-const int servo2_right_skip = 50;   // Position for skipping right needles with servo 2
+const int servo1_left_skip = 170;   // Position for skipping left needles with servo 1
+const int servo2_left_skip = 10;    // Position for skipping left needles with servo 2
+const int servo1_right_skip = 170;  // Position for skipping right needles with servo 1
+const int servo2_right_skip = 10;   // Position for skipping right needles with servo 2
 
 const int servo_big_left = 70;      // Position for big servo when moving to the left
 const int servo_big_right = 1;      // Position for big servo when moving to the right
 
-const int first_needle_distance_left = 270;  // Distance to the first needle on the left (measured from switch, after bump)
+const int first_needle_distance_left = 250;  // Distance to the first needle on the left (measured from switch, after bump)
 const int first_needle_distance_right = 250; // Distance to the first needle on the right (measured from switch,  after bump)
 
 const int carriage_steps = 2500;   // Number of steps required to move the entire carriage
-const int needle_steps = 42;       // Number of steps needed per needle 
+const int needle_steps = 40;       // Number of steps needed per needle 
 
 const int delay_big_servo = 1000;  // Delay for big servo movement (longer movement)
 const int delay_small_servo = 500; // Delay for small servo movement (shorter movement)
@@ -123,6 +130,21 @@ bool addToBuffer(String command) {
 }
 
 /**
+ * Displays a message on the LCD.
+ * This function clears the existing display and prints new text.
+ * @param line1 The first line of text to display. This is mandatory.
+ * @param line2 The second line of text to display. This is optional and defaults to an empty string if not provided.
+ */
+void displayMessage(String line1, String line2 = "") {
+  //lcd.clear();                   
+  //lcd.setCursor(0, 0);          
+  //lcd.print(line1);               
+  //lcd.setCursor(0, 1);            
+  //lcd.print(line2);               
+}
+
+
+/**
  * Sets up hardware pins, initializes servos, and prepares the system.
  * Called once during the microcontroller's boot process.
  */
@@ -130,6 +152,8 @@ void setup() {
     pinMode(servo1_pin, OUTPUT);  
     pinMode(servo2_pin, OUTPUT);  
     pinMode(COMM_RECEIVE_PIN, INPUT);
+
+    pinMode(CONF_RECEIVE_PIN, INPUT_PULLUP);
     
     Serial.begin(9600);           
     Wire.begin();              
@@ -142,8 +166,25 @@ void setup() {
     servo2.write(0); 
     
     initCommandBuffer();
+
+    //lcd.begin(16, 2);
+    //displayMessage("Welcome to", "Stitchify");
     
     Serial.println("Knitting machine controller ready.");
+}
+
+/**
+ * Waits for confirmation from the CONF_RECEIVE_PIN before proceeding.
+ * Used during specific knitting operations requiring acknowledgment.
+ * Checking serial while waiting.
+ * @return true once confirmation is received.
+ */
+void waitForRowConfirmation() {
+  displayMessage("Is everything", "okay?");
+  int switch_state = digitalRead(CONF_RECEIVE_PIN);
+  while(switch_state == LOW) {
+    switch_state = digitalRead(CONF_RECEIVE_PIN);
+  }
 }
 
 /**
@@ -214,7 +255,6 @@ void moveStep(String input)
 
     delay(delay_sending);
     while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
-      checkSerial();
     }
     Serial.println("Signal received from slave");
 
@@ -247,7 +287,6 @@ void goFirstLeft()
   moveStep("s "+String(servo_big_left));
 }
 
-
 /**
  * Executes a row movement command based on the input.
  * Handles knitting rows and needle adjustments.
@@ -256,20 +295,32 @@ void goFirstLeft()
 void moveRow(String input)
 {
   Serial.println(input);
-  if (input.startsWith("kr")) {
+  if (input.startsWith("krb")) {
     goFirstRight();
     moveStep("n "+String(carriage_steps));
   }
-  else if(input.startsWith("kl")) {
+  else if(input.startsWith("klb")) {
     goFirstLeft();
+    moveStep("n -"+String(carriage_steps));
+  }
+  else if (input.startsWith("krs")) {
+    goFirstRight();
+    waitForRowConfirmation();
+    moveStep("n "+String(carriage_steps));
+  }
+  else if(input.startsWith("kls")) {
+    goFirstLeft();
+    waitForRowConfirmation();
     moveStep("n -"+String(carriage_steps));
   }
   else if (input.startsWith("krp")) {
     goFirstRight();
+    waitForRowConfirmation();
     moveStep("n "+String(carriage_steps));
   }
   else if(input.startsWith("klp")) {
     goFirstLeft();
+    waitForRowConfirmation();
     moveStep("n -"+String(carriage_steps));
   }
   else if(input.startsWith("fl")) {
@@ -278,7 +329,6 @@ void moveRow(String input)
   else if(input.startsWith("fr")) {
     goFirstRight();
   }
-
   else if(input.startsWith("ar")) {
     moveStep("n "+String(first_needle_distance_left));
   }
@@ -318,16 +368,6 @@ void moveRow(String input)
   }
 }
 
-/**
- * Waits for confirmation from the CONF_RECEIVE_PIN before proceeding.
- * Used during specific knitting operations requiring acknowledgment.
- * Checking serial while waiting.
- * @return true once confirmation is received.
- */
-bool waitForRowConfirmation() {
-  while(CONF_RECEIVE_PIN == LOW) {}
-  checkSerial();
-}
 
 /**
  * Processes knitting commands, including multiple rows and patterns.
@@ -337,33 +377,47 @@ void knit(String input)
 {
   if (input.startsWith("knit ")) {
     int number_rows = input.substring(5).toInt();
+    displayMessage("Ready to knit:", String(number_rows) + " rows");
+    delay(2000);
     for(int i=0; i<number_rows; i++)
     {
-      if(i%2==0) moveRow("kl");
-      if(i%2==1) moveRow("kr");
+      if(i%2==0) moveRow("klb");
+      if(i%2==1) moveRow("krb");
+      displayMessage("Knitted " + String(i + 1), "/" + String(number_rows) + " rows");
+      delay(1000);
     }
+    displayMessage("Knitting done!");
   }
-  if (input.startsWith("knits ")) {
+  else if (input.startsWith("knits ")) {
     int number_rows = input.substring(6).toInt();
+    displayMessage("Ready to knit:", String(number_rows) + " rows");
+    delay(2000);
+    for(int i=0; i<number_rows; i++)
+    {
+      if(i%2==0) moveRow("kls");
+      if(i%2==1) moveRow("krs");
+      displayMessage("Knitted " + String(i + 1), "/" + String(number_rows) + " rows");
+      delay(1000);
+    }
+    displayMessage("Knitting done!");
+  }
+  else if (input.startsWith("knitp ")) {
+    int number_rows = input.substring(6).toInt();
+    displayMessage("Ready to knit:", String(number_rows) + " rows");
+    delay(2000);
     for(int i=0; i<number_rows; i++)
     {
       if(i%2==0) moveRow("klp");
       if(i%2==1) moveRow("krp");
-      waitForRowConfirmation();
+      displayMessage("Knitted " + String(i + 1), "/" + String(number_rows) + " rows");
+      delay(1000);
     }
-  }
-  if (input.startsWith("knitp ")) {
-    int number_rows = input.substring(6).toInt();
-    for(int i=0; i<number_rows; i++)
-    {
-      if(i%2==0) moveRow("klp");
-      if(i%2==1) moveRow("krp");
-      waitForRowConfirmation();
-    }
+    displayMessage("Knitting done!");
   }
   else
   {
     moveRow(input);
+    displayMessage("Knitting done!");
   }
 }
 
@@ -381,7 +435,6 @@ String getNextCommand() {
   return command;
 }
 
-
 /**
  * Processes buffered commands, executing them in sequence.
  */
@@ -393,7 +446,6 @@ void processBufferedCommands() {
     }
   }
 }
-
 
 /**
  * Reads serial input for incoming commands and adds them to the buffer.
