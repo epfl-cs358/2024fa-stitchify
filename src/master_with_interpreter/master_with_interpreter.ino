@@ -39,7 +39,7 @@
 #define MAX_BUFFER_SIZE 50
 #define MAX_COMMAND_LENGTH 10
 
-const int CONF_RECEIVE_PIN = 2; //Additional switch pin
+const int CONF_RECEIVE_PIN = 8; //Additional switch pin
 //LiquidCrystal lcd(13, 12, 5, 4, 3, 2);
 
 //Values to be valibrated
