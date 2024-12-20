@@ -24,6 +24,8 @@
  */
 #include <Wire.h>
 #include <Servo.h>
+#include <LiquidCrystal.h>
+
 
 #define servo1_pin 9 
 #define servo2_pin 10 
@@ -34,26 +36,28 @@
 #define MAX_BUFFER_SIZE 100
 #define MAX_COMMAND_LENGTH 10
 
+LiquidCrystal lcd(13, 12, 5, 4, 3, 2);
+
 
 //Values to be valibrated
-const int servo1_left_take = 130;   // Position for taking left needles with servo 1
-const int servo2_left_take = 180;   // Position for taking left needles with servo 2
-const int servo1_right_take = 0;    // Position for taking right needles with servo 1
-const int servo2_right_take = 50;   // Position for taking right needles with servo 2
+const int servo1_left_take = 170;   // Position for taking left needles with servo 1
+const int servo2_left_take = 140;   // Position for taking left needles with servo 2
+const int servo1_right_take = 60;    // Position for taking right needles with servo 1
+const int servo2_right_take = 10;   // Position for taking right needles with servo 2
 
-const int servo1_left_skip = 130;   // Position for skipping left needles with servo 1
-const int servo2_left_skip = 50;    // Position for skipping left needles with servo 2
-const int servo1_right_skip = 130;  // Position for skipping right needles with servo 1
-const int servo2_right_skip = 50;   // Position for skipping right needles with servo 2
+const int servo1_left_skip = 170;   // Position for skipping left needles with servo 1
+const int servo2_left_skip = 10;    // Position for skipping left needles with servo 2
+const int servo1_right_skip = 170;  // Position for skipping right needles with servo 1
+const int servo2_right_skip = 10;   // Position for skipping right needles with servo 2
 
 const int servo_big_left = 70;      // Position for big servo when moving to the left
 const int servo_big_right = 1;      // Position for big servo when moving to the right
 
-const int first_needle_distance_left = 270;  // Distance to the first needle on the left (measured from switch, after bump)
+const int first_needle_distance_left = 250;  // Distance to the first needle on the left (measured from switch, after bump)
 const int first_needle_distance_right = 250; // Distance to the first needle on the right (measured from switch,  after bump)
 
 const int carriage_steps = 2500;   // Number of steps required to move the entire carriage
-const int needle_steps = 42;       // Number of steps needed per needle 
+const int needle_steps = 40;       // Number of steps needed per needle 
 
 const int delay_big_servo = 1000;  // Delay for big servo movement (longer movement)
 const int delay_small_servo = 500; // Delay for small servo movement (shorter movement)
@@ -64,6 +68,7 @@ const int delay_sending = 500;      // Delay for sending commands to NEMA motor 
 Servo servo1;     
 Servo servo2;
 Servo servoBig;
+
 
 //Declaration of the buffer
 struct CommandBuffer {
@@ -123,6 +128,20 @@ bool addToBuffer(String command) {
 }
 
 /**
+ * Displays a message on the LCD.
+ * This function clears the existing display and prints new text.
+ * @param line1 The first line of text to display. This is mandatory.
+ * @param line2 The second line of text to display. This is optional and defaults to an empty string if not provided.
+ */
+void displayMessage(String line1, String line2 = "") {
+  lcd.clear();                   
+  lcd.setCursor(0, 0);          
+  lcd.print(line1);               
+  lcd.setCursor(0, 1);            
+  lcd.print(line2);               
+}
+
+/**
  * Sets up hardware pins, initializes servos, and prepares the system.
  * Called once during the microcontroller's boot process.
  */
@@ -144,6 +163,11 @@ void setup() {
     initCommandBuffer();
     
     Serial.println("Knitting machine controller ready.");
+
+    lcd.begin(16, 2);
+    displayMessage("Welcome to", "Stitchify");
+    delay(2000);
+    
 }
 
 /**
@@ -325,8 +349,13 @@ void moveRow(String input)
  * @return true once confirmation is received.
  */
 bool waitForRowConfirmation() {
+  displayMessage("Is everything", "okay?");
+  delay(1000);
   while(CONF_RECEIVE_PIN == LOW) {}
   checkSerial();
+  lcd.clear();  
+  lcd.print("Row confirmed");  
+  delay(1000);
 }
 
 /**
@@ -337,20 +366,33 @@ void knit(String input)
 {
   if (input.startsWith("knit ")) {
     int number_rows = input.substring(5).toInt();
+    displayMessage("Ready to knit:", String(number_rows) + " rows");
+    delay(2000);
     for(int i=0; i<number_rows; i++)
     {
       if(i%2==0) moveRow("kl");
       if(i%2==1) moveRow("kr");
+      displayMessage("Knitted " + String(i + 1), "/" + String(number_rows) + " rows");
+      delay(1000);
+
     }
+    displayMessage("Knitting done!");
+
   }
   if (input.startsWith("knits ")) {
     int number_rows = input.substring(6).toInt();
+    displayMessage("Ready to knit:", String(number_rows) + " rows");
+    delay(2000);
     for(int i=0; i<number_rows; i++)
     {
       if(i%2==0) moveRow("klp");
       if(i%2==1) moveRow("krp");
       waitForRowConfirmation();
+      displayMessage("Knitted " + String(i + 1), "/" + String(number_rows) + " rows");
+      delay(1000);
     }
+    displayMessage("Knitting done!");
+
   }
   if (input.startsWith("knitp ")) {
     int number_rows = input.substring(6).toInt();
@@ -359,12 +401,15 @@ void knit(String input)
       if(i%2==0) moveRow("klp");
       if(i%2==1) moveRow("krp");
       waitForRowConfirmation();
+      
     }
   }
   else
   {
     moveRow(input);
   }
+  displayMessage("Knitting done!");
+
 }
 
 /**
@@ -436,3 +481,4 @@ void loop() {
   checkSerial();
   processBufferedCommands();
 }
+
