@@ -12,15 +12,17 @@
 }
 
 .grid-cell {
-  background-color: #fff;
+  background-color: #f3f3f3; /* Light gray background for grid items */
   border: 1px solid #ccc;
   cursor: pointer;
   transition: background-color 0.3s ease;
   box-sizing: border-box;
+  padding: 10px;
+  border-radius: 4px; /* Optional: Adds rounded corners to the grid items */
 }
 
 .grid-cell.ticked {
-  background-color: #81c4eb;
+  background-color: #81c4eb; /* Highlighted color for "ticked" state */
 }
 
 .download-btn {
@@ -32,8 +34,14 @@
   margin-top: 20px;
   font-size: 16px;
   transition: background-color 0.3s ease;
+  border-radius: 4px; /* Optional: Adds rounded corners to the button */
 }
 
 .download-btn:hover {
   background-color: #5a99b3;
+}
+
+.download-btn:disabled {
+  background-color: #ddd; /* Make the button appear disabled */
+  cursor: not-allowed;
 }
