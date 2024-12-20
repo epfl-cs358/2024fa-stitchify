@@ -259,7 +259,7 @@ Some of the issues we encountered during our prototyping and the decisions taken
 
 **9. Switches** : They were originally also supposed to be fixed on the side panels, but further consideration showed they would hinder the pulley and stepper motor supports. In the end, they are fixed on the bed.
 
-**10. ESP32-CAM vs Wemos D1 R32 vs Arduino Uno** : We originally wanted to use the ESP32-CAM as it had built-in wifi connectivity and would allow wireless communication with the main Arduino Uno, in addition to its small size. However, we discovered that in the way we wanted to use it, there would only be a very small number of usable pins, which wasn't enough at all. We decided to look into the Wemos R32, which also had built-in wifi and looked a lot like an Arduino Uno. But there was a lot of pins adaptation issues as the Wemos uses a different pin naming pattern. In the end, we just decided to use an additional Arduino Uno for prototype 1 and will try to use the Wemos R1 D32 for connectivity with the webapp.
+**10. ESP32-CAM vs Wemos D1 R32 vs Arduino Uno** : We originally wanted to use the ESP32-CAM as it had built-in wifi connectivity and would allow wireless communication with the main Arduino Uno, in addition to its small size. However, we discovered that in the way we wanted to use it, there would only be a very small number of usable pins, which wasn't enough at all. We decided to look into the Wemos R32, which also had built-in wifi and looked a lot like an Arduino Uno. But there was a lot of pins adaptation issues as the Wemos uses a different pin naming pattern. In the end, we just decided to use an additional Arduino Uno for prototype 1 and managed to use the Wemos R1 D32 for connectivity with the webapp.
 
 ## Possible Future Enhancements
 
