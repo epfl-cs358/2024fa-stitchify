@@ -55,7 +55,7 @@ const int carriage_steps = 2500;   // Number of steps required to move the entir
 const int needle_steps = 42;       // Number of steps needed per needle 
 
 const int delay_big_servo = 1000;  // Delay for big servo movement (longer movement)
-const int delay_small_servo = 2000; // Delay for small servo movement (shorter movement)
+const int delay_small_servo = 500; // Delay for small servo movement (shorter movement)
 const int delay_sending = 500;      // Delay for sending commands to NEMA motor (for communication pin switch)
 
 
