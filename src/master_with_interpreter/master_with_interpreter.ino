@@ -19,7 +19,8 @@
  * - ls x     : Left skip x needles (lower needles down)
  * - rs x     : Right skip x needles (lower needles down)
  * - knit x   : Knit x double rows (right and left equals one row)
- *
+ * - knits x  : Knit x double rows with confirmation after each row
+ * - knitp x  : Knit x double rows of pattern with confirmation after each row
  */
 #include <Wire.h>
 #include <Servo.h>
@@ -30,7 +31,7 @@
 #define CONF_RECEIVE_PIN 8
 #define COMM_RECEIVE_PIN 7
 
-#define MAX_BUFFER_SIZE 50
+#define MAX_BUFFER_SIZE 100
 #define MAX_COMMAND_LENGTH 10
 
 
@@ -59,12 +60,12 @@ const int delay_small_servo = 500; // Delay for small servo movement (shorter mo
 const int delay_sending = 500;      // Delay for sending commands to NEMA motor (for communication pin switch)
 
 
-
 //Declaration of other components
 Servo servo1;     
 Servo servo2;
 Servo servoBig;
 
+//Declaration of the buffer
 struct CommandBuffer {
     char commands[MAX_BUFFER_SIZE][MAX_COMMAND_LENGTH];
     int head;
@@ -72,20 +73,37 @@ struct CommandBuffer {
     int count;
 } cmdBuffer;
 
+/**
+ * Initializes the command buffer to manage incoming commands for processing.
+ * Resets the buffer head, tail, and count values.
+ */
 void initCommandBuffer() {
     cmdBuffer.head = 0;
     cmdBuffer.tail = 0;
     cmdBuffer.count = 0;
 }
 
+/**
+ * Checks if the command buffer is full.
+ * @return true if the buffer is full, false otherwise.
+ */
 bool isBufferFull() {
     return cmdBuffer.count >= MAX_BUFFER_SIZE;
 }
 
+/**
+ * Checks if the command buffer is empty.
+ * @return true if the buffer is empty, false otherwise.
+ */
 bool isBufferEmpty() {
     return cmdBuffer.count == 0;
 }
 
+/**
+ * Adds a command string to the command buffer if there's space.
+ * @param command The command string to add.
+ * @return true if the command was added successfully, false otherwise.
+ */
 bool addToBuffer(String command) {
     if (isBufferFull() || command.length() >= MAX_COMMAND_LENGTH) {
         Serial.println("Buffer full or command too long");
@@ -104,6 +122,10 @@ bool addToBuffer(String command) {
     return true;
 }
 
+/**
+ * Sets up hardware pins, initializes servos, and prepares the system.
+ * Called once during the microcontroller's boot process.
+ */
 void setup() {
     pinMode(servo1_pin, OUTPUT);  
     pinMode(servo2_pin, OUTPUT);  
@@ -124,7 +146,12 @@ void setup() {
     Serial.println("Knitting machine controller ready.");
 }
 
-
+/**
+ * Moves components based on the given input command string.
+ * Handles movement of servos and NEMA motors.
+ * Checking serial while moving NEMA.
+ * @param input The command string containing the movement instructions.
+ */
 void moveStep(String input)
 {
   if (input.startsWith("l")) {
@@ -187,7 +214,7 @@ void moveStep(String input)
 
     delay(delay_sending);
     while (digitalRead(COMM_RECEIVE_PIN) == LOW) {
-      Serial.println("x");
+      checkSerial();
     }
     Serial.println("Signal received from slave");
 
@@ -198,6 +225,9 @@ void moveStep(String input)
   }
 }
 
+/**
+ * Moves the knitting machine to the first needle on the right side (so that it's up).
+ */
 void goFirstRight()
 {
   moveStep("r");
@@ -206,6 +236,9 @@ void goFirstRight()
   moveStep("s "+String(servo_big_right));
 }
 
+/**
+ * Moves the knitting machine to the first needle on the left side (so that it's up).
+ */
 void goFirstLeft()
 {
   moveStep("l");
@@ -214,6 +247,12 @@ void goFirstLeft()
   moveStep("s "+String(servo_big_left));
 }
 
+
+/**
+ * Executes a row movement command based on the input.
+ * Handles knitting rows and needle adjustments.
+ * @param input The row command string.
+ */
 void moveRow(String input)
 {
   Serial.println(input);
@@ -244,20 +283,20 @@ void moveRow(String input)
     moveStep("n "+String(first_needle_distance_left));
   }
   else if(input.startsWith("al")) {
-    moveStep("n "+String(first_needle_distance_right));
+    moveStep("n -"+String(first_needle_distance_right));
   }
   else if(input.startsWith("lt ")) {
     int n_needles = input.substring(4).toInt();
     moveStep("s1 "+String(servo1_left_take));     
     moveStep("s2 "+String(servo2_left_take));   
-    moveStep("n "+String(needle_steps * n_needles));
+    moveStep("n -"+String(needle_steps * n_needles));
 
   }
   else if(input.startsWith("ls ")) {
     int n_needles = input.substring(4).toInt();
     moveStep("s1 "+String(servo1_left_skip));     
     moveStep("s2 "+String(servo2_left_skip));   
-    moveStep("n "+ String(needle_steps * n_needles));
+    moveStep("n -"+ String(needle_steps * n_needles));
 
   }
   else if(input.startsWith("rt ")) {
@@ -279,10 +318,21 @@ void moveRow(String input)
   }
 }
 
+/**
+ * Waits for confirmation from the CONF_RECEIVE_PIN before proceeding.
+ * Used during specific knitting operations requiring acknowledgment.
+ * Checking serial while waiting.
+ * @return true once confirmation is received.
+ */
 bool waitForRowConfirmation() {
   while(CONF_RECEIVE_PIN == LOW) {}
+  checkSerial();
 }
 
+/**
+ * Processes knitting commands, including multiple rows and patterns.
+ * @param input The knitting command string.
+ */
 void knit(String input)
 {
   if (input.startsWith("knit ")) {
@@ -291,6 +341,14 @@ void knit(String input)
     {
       if(i%2==0) moveRow("kl");
       if(i%2==1) moveRow("kr");
+    }
+  }
+  if (input.startsWith("knits ")) {
+    int number_rows = input.substring(6).toInt();
+    for(int i=0; i<number_rows; i++)
+    {
+      if(i%2==0) moveRow("klp");
+      if(i%2==1) moveRow("krp");
       waitForRowConfirmation();
     }
   }
@@ -309,6 +367,10 @@ void knit(String input)
   }
 }
 
+/**
+ * Retrieves the next command from the buffer.
+ * @return The next command string, or an empty string if the buffer is empty.
+ */
 String getNextCommand() {
   if (isBufferEmpty()) {
       return "";
@@ -319,6 +381,10 @@ String getNextCommand() {
   return command;
 }
 
+
+/**
+ * Processes buffered commands, executing them in sequence.
+ */
 void processBufferedCommands() {
   if (!isBufferEmpty()) {
     String command = getNextCommand();
@@ -328,6 +394,11 @@ void processBufferedCommands() {
   }
 }
 
+
+/**
+ * Reads serial input for incoming commands and adds them to the buffer.
+ * Supports parsing multiple commands separated by semicolons.
+ */
 void checkSerial()
 {
   if (Serial.available() > 0) {
@@ -357,7 +428,10 @@ void checkSerial()
   }
 }
 
-
+/**
+ * Main loop function, repeatedly called during the program's execution.
+ * Handles serial input and processes buffered commands.
+ */
 void loop() {
   checkSerial();
   processBufferedCommands();
