@@ -41,6 +41,7 @@
 #define MAX_COMMAND_LENGTH 10
 
 const int CONF_RECEIVE_PIN = 8; //Additional switch pin
+
 LiquidCrystal lcd(13, 12, 5, 4, 3, 2);
 
 //Values to be valibrated
@@ -48,6 +49,7 @@ const int servo1_left_take = 140;   // Position for taking left needles with ser
 const int servo2_left_take = 160;   // Position for taking left needles with servo 2
 const int servo1_right_take = 25;    // Position for taking right needles with servo 1
 const int servo2_right_take = 60;   // Position for taking right needles with servo 2
+
 
 const int servo1_left_skip = 170;   // Position for skipping left needles with servo 1
 const int servo2_left_skip = 10;    // Position for skipping left needles with servo 2
@@ -142,6 +144,7 @@ void displayMessage(String line1, String line2 = "") {
   lcd.print(line1);               
   lcd.setCursor(0, 1);            
   lcd.print(line2);               
+
 }
 
 
@@ -168,8 +171,10 @@ void setup() {
     
     initCommandBuffer();
 
+
     lcd.begin(16, 2);
     displayMessage("Welcome to", "Stitchify");
+
     
     Serial.println("Knitting machine controller ready.");
 }
@@ -298,10 +303,12 @@ void moveRow(String input)
   Serial.println(input);
   if (input.startsWith("krb")) {
     goFirstRight();
+    waitForRowConfirmation();
     moveStep("n "+String(carriage_steps));
   }
   else if(input.startsWith("klb")) {
     goFirstLeft();
+    waitForRowConfirmation();
     moveStep("n -"+String(carriage_steps));
   }
   else if (input.startsWith("krs")) {

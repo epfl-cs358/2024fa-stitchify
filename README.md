@@ -1,16 +1,18 @@
-# Stitchify
-
-
 <!-- ABOUT THE PROJECT -->
 
 ## Authors
 
 Wiktoria Rozkosz, Bogdan Cîrje, Imane Raihane, Lorie Xu, Yasmine Hidri, Victor Zablocki
 
+
 ## About The Project
 Fueled by curiosity, we worked to create a knitting machine from start to finish. The Knitting Robot is an Arduino-based automation system designed to knit simple fabric patterns such as scarves or scalable fabrics. The project aims to create a functional prototype capable of knitting patterns autonomously.
 
 We based our work on the open source project OpenKnit, and spent a lot of time analysing and researching about how to go about in creating our machine. We obviously didn't have 5-6 years like OpenKnit did, so we had to simplify OpenKnit's design by a lot in order to fit the time frame of 10 weeks.
+
+This is our project prototype in motion:
+https://github.com/user-attachments/assets/023492ee-7dcc-4365-b6ac-0f5af49786ec
+
 
 ## Key Features
 * **Web Interface**: A web app allows users to upload knitting patterns and customize their projects (e.g., scarves, beanies, or pullovers).
@@ -116,7 +118,8 @@ Below is the initial design incorporating multiple stepper motors to improve tor
 ![385799670-8f64526a-a05f-4db1-b084-6b4fe1a5de26](https://github.com/user-attachments/assets/1a5c0a5b-f347-4705-9548-388151839b8f)
 
 Below is the current project's Fritzing sketch :
-![image](https://github.com/user-attachments/assets/b4b510b4-6ebb-4623-97de-5d04ebab56fb)
+![image](https://github.com/user-attachments/assets/42b10e1d-9c68-4cb7-bc1e-d57afe74b177)
+
 
 ## Mechanical Designs
  * **Carriage** : ![image](https://github.com/user-attachments/assets/4fd38ac5-f687-4b51-980a-7e5eac8973f6)
@@ -150,8 +153,10 @@ The code implementation included the master-slave different data sharing channel
 - Listens for serial commands, handles multiple commands separated by semicolons, and processes them in sequence.
 - Communicates with NEMA motors via I2C using the Wire library additional channel for acknowledgments from the slave.
 
+
 ### Synchronization & Delays
 - Includes delays to synchronize servo and motor movements, ensuring proper sequencing of actions.
+
 
 ### Multi-command Support
 - Supports processing multiple commands in a single input, separated by semicolons, for efficient execution.
@@ -167,11 +172,17 @@ The code implementation included the master-slave different data sharing channel
 ### Web Application
 - The web application is built using **React** and includes several pages:
   - **Home**
-  - **Overview**
-  - **Project**
+
+    <img width="500" alt="Screenshot 2024-12-20 at 10 12 34" src="https://github.com/user-attachments/assets/f98fc7d6-c8c0-48ae-8aa1-89e73558ca09" />
+  - **Project Overview**
+    <img width="500" alt="Screenshot 2024-12-20 at 10 16 41" src="https://github.com/user-attachments/assets/62eb2c9d-9873-4859-be34-c35cea9ae388" />
   - **Download Pattern**
+    <img width="500" alt="Screenshot 2024-12-20 at 10 10 01" src="https://github.com/user-attachments/assets/285e6b2b-cef1-433c-9519-202bbea0db6b" />
   - **Create Pattern**
+    <img width="500" alt="Screenshot 2024-12-20 at 10 07 44" src="https://github.com/user-attachments/assets/62037330-264f-4165-b16a-cd746a30fdf9" />
   - **Contact**
+    <img width="500" alt="Screenshot 2024-12-20 at 10 08 14" src="https://github.com/user-attachments/assets/2e8d399f-57ce-430b-a658-7bbc4f56c193" />
+
 
 - The React frontend communicates with the Wemos device to upload/download patterns and interact with the knitting machine.
 
@@ -284,6 +295,12 @@ While the current prototype of the knitting machine is functional, there are sev
 - **Computer Vision Implementation**: The integration of an ESP32-CAM or similar vision system could enable advanced control features, such as automated pattern recognition or more precise needle positioning through real-time image processing.
 
 - **Improved Web Interface**: The web application could be enhanced to make pattern creation more intuitive, offer real-time feedback during the knitting process, and improve communication with the machine. Features could include drag-and-drop pattern design, live status updates, and automatic pattern generation.
+
+## Final Prototype 
+![396272513-12e6db7e-80a0-43ea-b348-9f53fb4e29a5](https://github.com/user-attachments/assets/c27c6ae6-081a-45dd-acc4-1e2682aeb572)
+![396790100-0d9a8779-574e-494d-af5e-7b810effc59a](https://github.com/user-attachments/assets/b5ff6b3d-0af7-4b92-abce-495b6ddac506)
+![396790045-effc61c9-1916-40eb-b391-8df3ec1e6962](https://github.com/user-attachments/assets/689e2a9f-d93e-4417-9f96-19fd86818005)
+
 
 ## Real-World Applications
 The knitting robot could be used in textile prototyping, allowing designers to test new patterns and fabric types quickly. It could also be useful for small-scale textile production in custom-made fashion.
