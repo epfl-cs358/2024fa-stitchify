@@ -19,11 +19,23 @@ We based our work on the open source project OpenKnit, and spent a lot of time a
 * **Educational Potential**: This project serves as a tool for teaching robotics, automation, and programming concepts.
 
 ## How It Works
-The knitting robot operates by controlling stepper motors and actuators to manipulate needles and yarn. The key steps are:
-* Pattern Upload: The user uploads a knitting pattern through the web interface. This pattern is typically a custom text-based file that describes the knitting design.
-* Conversion to Instructions: The uploaded pattern is converted into instructions that control the robot's movements (full list below).
-* Knitting Process: The robot uses stepper motors and actuators to control the needles and yarn, following the instructions step-by-step.
-* Real-Time Feedback: The LCD screen shows the progress and provides error messages (e.g., if the yarn breaks or if there's a mechanical malfunction).
+The knitting robot operates by using a combination of stepper motors, actuators, and precision-controlled components to manipulate needles and yarn. The process is divided into the following key steps:
+### 1. Pattern Upload:
+* The user uploads a knitting pattern through the web interface. Typically, this pattern is a custom, text-based file that describes the sequence of knitting actions required for the design.
+### 2. Conversion to Instructions:
+* The uploaded pattern is then parsed and converted into a series of detailed instructions. These instructions control the robot’s movement and actions, dictating how needles should be raised or lowered.
+* The system ensures precise execution of the pattern, coordinating between the needles, yarn feeder, and other actuators.
+### 3. Knitting Process:
+* Needle Movement: The carriage moves one needle at a time, enabling precise control over which needles are raised. Small servos embedded in the carriage allow the user to select individual needles for activation, ensuring each stitch is placed according to the pattern.
+* Yarn Feeding: A large servo controls the yarn feeder, which performs a swiping motion to ensure accurate placement of the yarn on the needles. This motion enhances precision, especially at the endpoints, that require fine control over yarn tension and placement.
+* Carriage Movement: The entire carriage is moved by a belt system powered by a NEMA stepper motor, ensuring smooth, coordinated motion across the entire width of the knitting surface.
+### 4. Real-Time Feedback:
+* LCD Screen: The system features an LCD screen that displays the progress of the knitting process, providing real-time feedback on the pattern's completion.
+### 5. User Interaction:
+* User Button: A dedicated button allows the user to pause or stop the machine after each row and confirm whether everything is functioning correctly. This button can be used to provide manual intervention if needed, ensuring the process runs smoothly.
+### 6. Safety Features:
+* Endpoint Switches: At the endpoints of the carriage, there are limit switches that prevent the system from overextending or damaging itself. These switches stop the carriage when it reaches the end of its travel, ensuring safe operation.
+This combination of precise needle control, enhanced yarn feeding mechanisms, and real-time monitoring allows the knitting robot to produce high-quality knitting patterns with minimal manual intervention.
 
 
 ## Used Components

@@ -30,6 +30,7 @@
 
 #include <Wire.h>
 #include <Servo.h>
+#include <LiquidCrystal.h>
 
 #define servo1_pin 9 
 #define servo2_pin 10 
@@ -40,13 +41,13 @@
 #define MAX_COMMAND_LENGTH 10
 
 const int CONF_RECEIVE_PIN = 8; //Additional switch pin
-//LiquidCrystal lcd(13, 12, 5, 4, 3, 2);
+LiquidCrystal lcd(13, 12, 5, 4, 3, 2);
 
 //Values to be valibrated
-const int servo1_left_take = 165;   // Position for taking left needles with servo 1
-const int servo2_left_take = 140;   // Position for taking left needles with servo 2
-const int servo1_right_take = 60;    // Position for taking right needles with servo 1
-const int servo2_right_take = 10;   // Position for taking right needles with servo 2
+const int servo1_left_take = 140;   // Position for taking left needles with servo 1
+const int servo2_left_take = 160;   // Position for taking left needles with servo 2
+const int servo1_right_take = 25;    // Position for taking right needles with servo 1
+const int servo2_right_take = 60;   // Position for taking right needles with servo 2
 
 const int servo1_left_skip = 170;   // Position for skipping left needles with servo 1
 const int servo2_left_skip = 10;    // Position for skipping left needles with servo 2
@@ -136,11 +137,11 @@ bool addToBuffer(String command) {
  * @param line2 The second line of text to display. This is optional and defaults to an empty string if not provided.
  */
 void displayMessage(String line1, String line2 = "") {
-  //lcd.clear();                   
-  //lcd.setCursor(0, 0);          
-  //lcd.print(line1);               
-  //lcd.setCursor(0, 1);            
-  //lcd.print(line2);               
+  lcd.clear();                   
+  lcd.setCursor(0, 0);          
+  lcd.print(line1);               
+  lcd.setCursor(0, 1);            
+  lcd.print(line2);               
 }
 
 
@@ -167,8 +168,8 @@ void setup() {
     
     initCommandBuffer();
 
-    //lcd.begin(16, 2);
-    //displayMessage("Welcome to", "Stitchify");
+    lcd.begin(16, 2);
+    displayMessage("Welcome to", "Stitchify");
     
     Serial.println("Knitting machine controller ready.");
 }
