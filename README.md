@@ -286,6 +286,12 @@ While the current prototype of the knitting machine is functional, there are sev
 
 - **Improved Web Interface**: The web application could be enhanced to make pattern creation more intuitive, offer real-time feedback during the knitting process, and improve communication with the machine. Features could include drag-and-drop pattern design, live status updates, and automatic pattern generation.
 
+## Final Prototype 
+![396272513-12e6db7e-80a0-43ea-b348-9f53fb4e29a5](https://github.com/user-attachments/assets/c27c6ae6-081a-45dd-acc4-1e2682aeb572)
+![396790100-0d9a8779-574e-494d-af5e-7b810effc59a](https://github.com/user-attachments/assets/b5ff6b3d-0af7-4b92-abce-495b6ddac506)
+![396790045-effc61c9-1916-40eb-b391-8df3ec1e6962](https://github.com/user-attachments/assets/689e2a9f-d93e-4417-9f96-19fd86818005)
+
+
 ## Real-World Applications
 The knitting robot could be used in textile prototyping, allowing designers to test new patterns and fabric types quickly. It could also be useful for small-scale textile production in custom-made fashion.
 
