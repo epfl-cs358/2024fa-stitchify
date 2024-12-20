@@ -116,7 +116,8 @@ Below is the initial design incorporating multiple stepper motors to improve tor
 ![385799670-8f64526a-a05f-4db1-b084-6b4fe1a5de26](https://github.com/user-attachments/assets/1a5c0a5b-f347-4705-9548-388151839b8f)
 
 Below is the current project's Fritzing sketch :
-![image](https://github.com/user-attachments/assets/b4b510b4-6ebb-4623-97de-5d04ebab56fb)
+![image](https://github.com/user-attachments/assets/42b10e1d-9c68-4cb7-bc1e-d57afe74b177)
+
 
 ## Mechanical Designs
  * **Carriage** : ![image](https://github.com/user-attachments/assets/4fd38ac5-f687-4b51-980a-7e5eac8973f6)
