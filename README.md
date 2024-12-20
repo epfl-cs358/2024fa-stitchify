@@ -21,19 +21,17 @@ Below is the current project's Fritzing sketch :
 ![image](https://github.com/user-attachments/assets/b4b510b4-6ebb-4623-97de-5d04ebab56fb)
 
 ## Mechanical Designs 
- * **Carriage** :
- * **Aluminium structure** :
- * **Electronic supports** :
- * **Flatbed** :
- * **Yarn feeder, slider** :
- * **Stepper motor and belt pincher** :
+ * **Carriage** : ![image](https://github.com/user-attachments/assets/4fd38ac5-f687-4b51-980a-7e5eac8973f6)
+ * **Aluminium structure** : ![image](https://github.com/user-attachments/assets/3f7c5bb9-529f-47a9-b5f7-1feda77b6e96)
+ * **Flatbed** : ![image](https://github.com/user-attachments/assets/cd4c9e36-d478-4eea-930e-ee60951d1314)
+ * **Yarn feeder, slider** : ![image](https://github.com/user-attachments/assets/5a23cc61-96bd-4c34-b919-b2d0b9764bfe)
+ * **Stepper motor and belt pincher** : ![image](https://github.com/user-attachments/assets/d8f58b81-8279-4ec2-b44f-7d1e8c1482e6)
+![image](https://github.com/user-attachments/assets/3d6c0d18-9bd0-4fb9-8170-d4e40dfb4f6c)
+
  * **Comb** : First tried a prototype using paper clips to see how it could work, then we made a comb with a hole to allow the addition of a weight. 
 
 ## Code Implementation
-The code implementation included the master-slave data sharing channel and management, the controller for the stepper motor (slave) and servo motors (master) as well as a simple command interpreter. 
-
-## Knitting Process
-
+The code implementation included the master-slave data sharing channel and management, the controller for the stepper motor (slave) and servo motors (master), a WEMOS hosting a webapp that allow communication and the launch of customized patterns, and a file format that was designed to define pattern.
 
 <!-- Issues -->
 ## Issues and Decisions Taken
