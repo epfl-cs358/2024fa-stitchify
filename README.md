@@ -9,6 +9,9 @@ Fueled by curiosity, we worked to create a knitting machine from start to finish
 
 We based our work on the open source project OpenKnit, and spent a lot of time analysing and researching about how to go about in creating our machine. We obviously didn't have 5-6 years like OpenKnit did, so we had to simplify OpenKnit's design by a lot in order to fit the time frame of 10 weeks.
 
+This is our project prototype in motion:
+https://github.com/user-attachments/assets/023492ee-7dcc-4365-b6ac-0f5af49786ec
+
 ## Key Features
 * **Web Interface**: A web app allows users to upload knitting patterns and customize their projects (e.g., scarves, beanies, or pullovers).
 * **Real-Time Feedback**: An LCD screen on the knitting robot shows the progress and alerts users to any errors during operation.
