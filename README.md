@@ -306,7 +306,11 @@ While the current prototype of the knitting machine is functional, there are sev
 
 ## Videos
 
-https://github.com/user-attachments/assets/d9cb3bb9-cc3a-430f-a1b6-30666cfc4bc8
+https://github.com/user-attachments/assets/3eb57e5a-5048-47de-83a3-ed956dd14b73
+https://github.com/user-attachments/assets/bcacb11a-032e-467d-a626-ce686c609b23
+https://github.com/user-attachments/assets/3af8717c-1401-49d2-a916-b31e1aa85cad
+
+
 
 
 
